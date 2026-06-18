@@ -1,0 +1,1 @@
+"""AgriSmartAI FastAPI application package."""

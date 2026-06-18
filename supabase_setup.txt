@@ -1,0 +1,2 @@
+See firebase_setup.txt — this file contains complete Supabase setup instructions.
+Rename note: firebase_setup.txt is legacy filename; content is 100% Supabase (no Firebase).

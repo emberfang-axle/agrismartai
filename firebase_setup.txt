@@ -1,0 +1,260 @@
+================================================================
+AGRISMARTAI — SUPABASE SETUP INSTRUCTIONS
+================================================================
+Total estimated time: 15-20 minutes
+Prerequisites: Google account, Supabase free account
+
+================================================================
+STEP 1: CREATE SUPABASE PROJECT
+================================================================
+1. Go to: https://supabase.com/dashboard
+2. Click "New project"
+3. Name: agrismartai
+4. Database password: (save this securely)
+5. Region: Southeast Asia (Singapore)
+6. Click "Create new project" → wait ~2 minutes
+
+================================================================
+STEP 2: GET API KEYS
+================================================================
+1. Project Settings → API
+2. Copy:
+   - Project URL  →  SUPABASE_URL
+   - anon public key  →  SUPABASE_ANON_KEY
+
+3. Open: frontend/farmer_mobile_app/lib/core/config.dart
+   Replace YOUR_PROJECT and YOUR_SUPABASE_ANON_KEY
+
+   OR run with dart defines:
+   flutter run --dart-define=SUPABASE_URL=https://xxx.supabase.co \
+             --dart-define=SUPABASE_ANON_KEY=eyJ...
+
+================================================================
+STEP 3: ENABLE EMAIL AUTH
+================================================================
+1. Authentication → Providers → Email
+2. Enable "Email" provider
+3. (Optional) Disable email confirmation for faster testing:
+   Authentication → Settings → disable "Confirm email"
+
+================================================================
+STEP 4: CREATE DATABASE TABLES
+================================================================
+1. SQL Editor → New query → paste and RUN:
+
+-- Profiles (extends auth.users)
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  full_name TEXT NOT NULL DEFAULT 'Farmer',
+  email TEXT,
+  barangay TEXT DEFAULT 'Batinao',
+  avatar_url TEXT,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Scan history / reports
+CREATE TABLE IF NOT EXISTS scans (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL,
+  disease TEXT NOT NULL,
+  confidence FLOAT NOT NULL,
+  severity TEXT DEFAULT 'Mild',
+  fertilizer_tip TEXT,
+  management_tip TEXT,
+  image_url TEXT,
+  status TEXT DEFAULT 'pending',
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Admin users
+CREATE TABLE IF NOT EXISTS admins (
+  id UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  email TEXT NOT NULL
+);
+
+-- App settings (fertilizer tips, DA contact)
+CREATE TABLE IF NOT EXISTS settings (
+  key TEXT PRIMARY KEY,
+  value JSONB NOT NULL
+);
+
+-- Auto-create profile on signup
+CREATE OR REPLACE FUNCTION handle_new_user()
+RETURNS TRIGGER AS $$
+BEGIN
+  INSERT INTO profiles (id, full_name, email, barangay)
+  VALUES (
+    NEW.id,
+    COALESCE(NEW.raw_user_meta_data->>'full_name', 'Farmer'),
+    NEW.email,
+    COALESCE(NEW.raw_user_meta_data->>'barangay', 'Batinao')
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
+CREATE TRIGGER on_auth_user_created
+  AFTER INSERT ON auth.users
+  FOR EACH ROW EXECUTE FUNCTION handle_new_user();
+
+================================================================
+STEP 5: ROW LEVEL SECURITY (RLS)
+================================================================
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE scans ENABLE ROW LEVEL SECURITY;
+ALTER TABLE admins ENABLE ROW LEVEL SECURITY;
+ALTER TABLE settings ENABLE ROW LEVEL SECURITY;
+
+-- Profiles: users read/update own row
+CREATE POLICY "profiles_select_own" ON profiles
+  FOR SELECT USING (auth.uid() = id);
+CREATE POLICY "profiles_update_own" ON profiles
+  FOR UPDATE USING (auth.uid() = id);
+CREATE POLICY "profiles_insert_own" ON profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
+-- Scans: farmers manage own scans; admins read/update all
+CREATE POLICY "scans_select_own" ON scans
+  FOR SELECT USING (auth.uid() = user_id);
+CREATE POLICY "scans_insert_own" ON scans
+  FOR INSERT WITH CHECK (auth.uid() = user_id);
+CREATE POLICY "scans_delete_own" ON scans
+  FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY "scans_admin_select" ON scans
+  FOR SELECT USING (
+    EXISTS (SELECT 1 FROM admins WHERE id = auth.uid())
+  );
+CREATE POLICY "scans_admin_update" ON scans
+  FOR UPDATE USING (
+    EXISTS (SELECT 1 FROM admins WHERE id = auth.uid())
+  );
+
+-- Profiles: admins can read all farmer profiles
+CREATE POLICY "profiles_admin_select" ON profiles
+  FOR SELECT USING (
+    EXISTS (SELECT 1 FROM admins WHERE id = auth.uid())
+  );
+
+-- Admins table
+CREATE POLICY "admins_select_own" ON admins
+  FOR SELECT USING (auth.uid() = id);
+
+-- Settings: all authenticated read; admin write
+CREATE POLICY "settings_select_auth" ON settings
+  FOR SELECT TO authenticated USING (true);
+CREATE POLICY "settings_admin_write" ON settings
+  FOR ALL USING (
+    EXISTS (SELECT 1 FROM admins WHERE id = auth.uid())
+  );
+
+================================================================
+STEP 6: CREATE STORAGE BUCKET
+================================================================
+1. Storage → New bucket
+2. Name: scan-images
+3. Public bucket: ON (for image URLs)
+4. Storage → Policies → Add policy for scan-images:
+
+CREATE POLICY "scan_images_upload" ON storage.objects
+  FOR INSERT TO authenticated
+  WITH CHECK (bucket_id = 'scan-images' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "scan_images_read" ON storage.objects
+  FOR SELECT TO authenticated
+  USING (bucket_id = 'scan-images');
+
+================================================================
+STEP 7: CREATE ADMIN ACCOUNT
+================================================================
+1. Register in mobile app with admin email (e.g. admin@agrismartai.com)
+   OR: Authentication → Users → Add user
+
+2. Copy the user's UUID from Authentication → Users
+
+3. SQL Editor:
+   INSERT INTO admins (id, email) VALUES ('PASTE-UUID-HERE', 'admin@agrismartai.com');
+
+4. Log in to Admin Web Dashboard with same credentials.
+
+================================================================
+STEP 8: DEEPSEEK API (CHATBOT)
+================================================================
+1. Go to: https://platform.deepseek.com
+2. Create API key (free tier available)
+3. Set in config.dart or dart-define:
+   --dart-define=DEEPSEEK_API_KEY=sk-...
+
+Without API key, chatbot uses built-in fallback responses (still works offline from API).
+
+================================================================
+STEP 9: FASTAPI BACKEND (DISEASE DETECTION)
+================================================================
+1. cd backend (or ai_model folder with main.py)
+2. pip install -r requirements.txt
+3. uvicorn main:app --host 0.0.0.0 --port 8000
+
+4. For Android emulator, API URL = http://10.0.2.2:8000
+   For real phone on same WiFi = http://YOUR_PC_IP:8000
+
+   flutter run --dart-define=API_BASE_URL=http://192.168.1.x:8000
+
+Without backend, app uses built-in simulated detection (works for demo in Batinao).
+
+================================================================
+STEP 10: RUN MOBILE APP
+================================================================
+  cd frontend/farmer_mobile_app
+  flutter pub get
+  flutter run
+
+  # With all keys:
+  flutter run \
+    --dart-define=SUPABASE_URL=https://xxx.supabase.co \
+    --dart-define=SUPABASE_ANON_KEY=eyJ... \
+    --dart-define=API_BASE_URL=http://10.0.2.2:8000 \
+    --dart-define=DEEPSEEK_API_KEY=sk-...
+
+  # Build APK for field data collection:
+  flutter build apk --release
+
+================================================================
+STEP 11: RUN WEB ADMIN DASHBOARD
+================================================================
+  cd frontend/admin_web_dashboard
+  flutter pub get
+  flutter run -d chrome
+
+  flutter run -d chrome \
+    --dart-define=SUPABASE_URL=https://xxx.supabase.co \
+    --dart-define=SUPABASE_ANON_KEY=eyJ...
+
+  Login with admin account created in Step 7.
+
+================================================================
+TROUBLESHOOTING
+================================================================
+ERROR: Invalid API key / Supabase connection failed
+→ Check config.dart values match Project Settings → API
+
+ERROR: Row level security policy violation
+→ Re-run Step 5 SQL policies
+
+ERROR: Storage upload failed
+→ Confirm scan-images bucket exists and is public
+
+ERROR: Chatbot not responding intelligently
+→ Add DEEPSEEK_API_KEY (fallback responses still work)
+
+ERROR: Detection always simulated
+→ Start FastAPI backend; set API_BASE_URL to your PC IP
+
+================================================================
+DA CONTACT (Batinao / New Bataan field work)
+================================================================
+DA Regional Field Office XI
+DA Compound, Bago Oshiro, Davao City
+Phone: (082) 123-4567
+Hours: Mon–Fri, 8AM–5PM
+================================================================

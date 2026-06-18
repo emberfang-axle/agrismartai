@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgriSmartAI — Rice Detection Test</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root { --primary:#0B3B1F; --gold:#D4A017; --accent:#43A047; --bg:#FAF9F6; --surface:#fff; }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:Inter,sans-serif; background:var(--bg); color:#1A1A1A; }
+    header { background:linear-gradient(135deg,#0B3B1F,#2E7D32); color:#fff; padding:2rem; text-align:center; }
+    header h1 { font-family:Poppins,sans-serif; color:var(--gold); font-size:2rem; }
+    main { max-width:720px; margin:2rem auto; padding:0 1.5rem; }
+    .card { background:var(--surface); border-radius:24px; padding:1.75rem; box-shadow:0 8px 20px rgba(0,0,0,.08); margin-bottom:1.25rem; }
+    h2 { font-family:Poppins,sans-serif; font-size:1.15rem; margin-bottom:1rem; }
+    .drop {
+      border:2px dashed var(--accent); border-radius:20px; padding:2rem; text-align:center;
+      cursor:pointer; background:#f0faf0; transition:.2s;
+    }
+    .drop:hover { background:#e8f5e9; }
+    .drop img { max-width:100%; max-height:280px; border-radius:16px; margin-top:1rem; }
+    button {
+      background:linear-gradient(135deg,#E8C547,#D4A017); border:none; border-radius:40px;
+      padding:.85rem 1.75rem; font-family:Poppins,sans-serif; font-weight:600;
+      color:var(--primary); cursor:pointer; margin:.5rem .5rem 0 0; font-size:.95rem;
+    }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    .result { margin-top:1rem; padding:1rem; border-radius:16px; font-size:.95rem; line-height:1.5; }
+    .ok { background:#E8F5E9; border:1px solid var(--accent); }
+    .fail { background:#FFEBEE; border:1px solid #C62828; color:#B71C1C; }
+    pre { background:#f5f5f5; border-radius:12px; padding:1rem; font-size:.78rem; overflow:auto; max-height:220px; margin-top:.75rem; }
+    .status { display:inline-block; padding:.25rem .75rem; border-radius:20px; font-size:.85rem; font-weight:600; }
+    .online { background:#E8F5E9; color:var(--accent); }
+    .offline { background:#FFEBEE; color:#C62828; }
+    .tips { font-size:.85rem; color:#666; margin-top:.75rem; line-height:1.6; }
+  </style>
+</head>
+<body>
+  <header>
+    <div style="font-size:2.5rem">🌾</div>
+    <h1>AgriSmartAI</h1>
+    <p style="opacity:.85;margin-top:.5rem">Rice Leaf Detection Test — Batinao Demo</p>
+    <p style="margin-top:.75rem"><span id="apiStatus" class="status offline">Checking API...</span></p>
+  </header>
+  <main>
+    <div class="card">
+      <h2>📷 Upload Rice Leaf Photo</h2>
+      <p class="tips">Accepts <strong>green</strong>, <strong>yellow (Tungro)</strong>, and <strong>diseased</strong> rice leaves. Rejects faces, sky, and other objects.</p>
+      <div class="drop" id="dropZone" onclick="document.getElementById('fileInput').click()">
+        <p>Click or drag your rice leaf photo here</p>
+        <p style="font-size:.85rem;color:#666;margin-top:.5rem">JPG / PNG — frame one leaf, good lighting</p>
+        <img id="preview" style="display:none" alt="preview" />
+      </div>
+      <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" hidden />
+      <div style="margin-top:1rem">
+        <button id="validateBtn" disabled onclick="validateImage()">1. Check if Rice Leaf</button>
+        <button id="predictBtn" disabled onclick="predictImage()">2. Detect Disease</button>
+      </div>
+      <div id="validationResult"></div>
+      <pre id="predictOut" style="display:none"></pre>
+    </div>
+    <div class="card">
+      <h2>✅ Accepted</h2>
+      <p class="tips">Close-up rice leaf — green, yellow (Tungro), or with disease spots. No face/hands/sky.</p>
+      <h2 style="margin-top:1rem">❌ Rejected</h2>
+      <p class="tips">Selfies, random objects, indoor scenes, blue sky, non-green photos.</p>
+    </div>
+  </main>
+  <script>
+    const API = 'http://127.0.0.1:8000';
+    let selectedFile = null;
+
+    async function checkHealth() {
+      const el = document.getElementById('apiStatus');
+      try {
+        await fetch(API + '/health');
+        el.textContent = 'API Online';
+        el.className = 'status online';
+      } catch {
+        el.textContent = 'API Offline — run: cd backend && python -m uvicorn main:app --port 8000';
+        el.className = 'status offline';
+      }
+    }
+
+    const fileInput = document.getElementById('fileInput');
+    const preview = document.getElementById('preview');
+    const validateBtn = document.getElementById('validateBtn');
+    const predictBtn = document.getElementById('predictBtn');
+
+    fileInput.onchange = () => setFile(fileInput.files[0]);
+    const drop = document.getElementById('dropZone');
+    drop.ondragover = e => { e.preventDefault(); drop.style.background = '#e8f5e9'; };
+    drop.ondragleave = () => drop.style.background = '#f0faf0';
+    drop.ondrop = e => { e.preventDefault(); drop.style.background = '#f0faf0'; setFile(e.dataTransfer.files[0]); };
+
+    function setFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      selectedFile = file;
+      preview.src = URL.createObjectURL(file);
+      preview.style.display = 'block';
+      validateBtn.disabled = false;
+      predictBtn.disabled = false;
+      document.getElementById('validationResult').innerHTML = '';
+      document.getElementById('predictOut').style.display = 'none';
+    }
+
+    async function postImage(endpoint) {
+      const fd = new FormData();
+      fd.append('file', selectedFile);
+      const r = await fetch(API + endpoint, { method: 'POST', body: fd });
+      const text = await r.text();
+      let json;
+      try { json = JSON.parse(text); } catch { json = { raw: text }; }
+      if (!r.ok) throw { status: r.status, body: json };
+      return json;
+    }
+
+    async function validateImage() {
+      const box = document.getElementById('validationResult');
+      box.innerHTML = '<p style="margin-top:1rem">Checking...</p>';
+      try {
+        const j = await postImage('/validate');
+        box.innerHTML = `<div class="result ok"><strong>${j.message}</strong><br>Green ratio: ${(j.green_ratio*100).toFixed(1)}%</div>`;
+      } catch (e) {
+        const msg = e.body?.detail?.message || e.body?.message || JSON.stringify(e.body) || 'Validation failed';
+        box.innerHTML = `<div class="result fail"><strong>${msg}</strong></div>`;
+      }
+    }
+
+    async function predictImage() {
+      const box = document.getElementById('validationResult');
+      const out = document.getElementById('predictOut');
+      box.innerHTML = '<p style="margin-top:1rem">Analyzing disease...</p>';
+      try {
+        const j = await postImage('/predict');
+        box.innerHTML = `<div class="result ok"><strong>✅ ${j.display_name || j.disease}</strong><br>Confidence: ${j.confidence_percent} · ${j.severity}</div>`;
+        out.style.display = 'block';
+        out.textContent = JSON.stringify(j, null, 2);
+      } catch (e) {
+        const d = e.body?.detail;
+        const msg = (typeof d === 'object' ? d.message : d) || 'Not a rice leaf or API error';
+        box.innerHTML = `<div class="result fail"><strong>❌ ${msg}</strong></div>`;
+        out.style.display = 'none';
+      }
+    }
+
+    checkHealth();
+  </script>
+</body>
+</html>

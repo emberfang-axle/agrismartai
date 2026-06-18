@@ -1,0 +1,26 @@
+# Flutter auto-generated — NOT your code (0% of your work)
+# See README.md for explanation
+
+**/ios/
+**/macos/
+**/linux/
+**/windows/
+**/.cxx/
+**/build/
+**/.dart_tool/
+**/.flutter-plugins-dependencies
+**/.packages
+**/GeneratedPluginRegistrant.*
+**/generated_plugin_registrant.*
+**/*.cmake
+**/CMakeFiles/
+**/CMakeCache.txt
+
+# IDE
+.idea/
+*.iml
+
+# Secrets — never commit
+**/.env
+**/google-services.json
+**/GoogleService-Info.plist
