@@ -3,6 +3,12 @@
 ## Quick preview (no Flutter needed)
 
 1. **Start backend** (Terminal 1):
+   ```bash
+   cd backend
+   python3 -m uvicorn main:app --host 127.0.0.1 --port 8000
+   ```
+
+   On Windows PowerShell, `python3` may be `python`:
    ```powershell
    cd backend
    python -m uvicorn main:app --host 127.0.0.1 --port 8000

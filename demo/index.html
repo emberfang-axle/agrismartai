@@ -3,145 +3,477 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AgriSmartAI — Rice Detection Test</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet" />
+  <title>AgriSmartAI - Rice Detection Demo</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap"
+    rel="stylesheet"
+  />
   <style>
-    :root { --primary:#0B3B1F; --gold:#D4A017; --accent:#43A047; --bg:#FAF9F6; --surface:#fff; }
-    * { box-sizing:border-box; margin:0; padding:0; }
-    body { font-family:Inter,sans-serif; background:var(--bg); color:#1A1A1A; }
-    header { background:linear-gradient(135deg,#0B3B1F,#2E7D32); color:#fff; padding:2rem; text-align:center; }
-    header h1 { font-family:Poppins,sans-serif; color:var(--gold); font-size:2rem; }
-    main { max-width:720px; margin:2rem auto; padding:0 1.5rem; }
-    .card { background:var(--surface); border-radius:24px; padding:1.75rem; box-shadow:0 8px 20px rgba(0,0,0,.08); margin-bottom:1.25rem; }
-    h2 { font-family:Poppins,sans-serif; font-size:1.15rem; margin-bottom:1rem; }
+    :root {
+      --primary: #0b3b1f;
+      --primary-soft: #14532d;
+      --gold: #d4a017;
+      --accent: #43a047;
+      --accent-soft: #edf7ee;
+      --bg: #f4f7f2;
+      --surface: #ffffff;
+      --muted: #5f6d63;
+      --danger: #c62828;
+      --danger-soft: #ffebee;
+      --radius-lg: 24px;
+      --radius-md: 14px;
+      --shadow-lg: 0 18px 40px rgba(11, 59, 31, 0.1);
+      --shadow-md: 0 8px 20px rgba(11, 59, 31, 0.09);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Inter, sans-serif;
+      background: radial-gradient(circle at top, #f8fcf8 0%, var(--bg) 45%, #eef4ec 100%);
+      color: #1a1a1a;
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--primary), #2e7d32);
+      color: #fff;
+      padding: 2.2rem 1.3rem 3rem;
+      text-align: center;
+      box-shadow: var(--shadow-md);
+    }
+
+    .hero h1 {
+      font-family: Poppins, sans-serif;
+      color: #f0cf6c;
+      font-size: clamp(1.8rem, 2.5vw, 2.25rem);
+      letter-spacing: 0.4px;
+    }
+
+    .hero p {
+      margin-top: 0.55rem;
+      color: rgba(255, 255, 255, 0.88);
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-top: 1rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 999px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      border: 1px solid transparent;
+      background: #fff;
+      color: #39493f;
+    }
+
+    .online {
+      color: #1b5e20;
+      border-color: #a5d6a7;
+      background: #ecf8ed;
+    }
+
+    .offline {
+      color: #b71c1c;
+      border-color: #ffcdd2;
+      background: #fff3f4;
+    }
+
+    .layout {
+      max-width: 1040px;
+      margin: -1.7rem auto 2.2rem;
+      padding: 0 1rem;
+      display: grid;
+      grid-template-columns: 1.35fr 0.9fr;
+      gap: 1rem;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid #e7efe5;
+    }
+
+    .card h2 {
+      font-family: Poppins, sans-serif;
+      font-size: 1.12rem;
+      color: var(--primary-soft);
+      margin-bottom: 0.4rem;
+    }
+
+    .tips {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
     .drop {
-      border:2px dashed var(--accent); border-radius:20px; padding:2rem; text-align:center;
-      cursor:pointer; background:#f0faf0; transition:.2s;
+      margin-top: 0.95rem;
+      border: 2px dashed #7ab37e;
+      border-radius: 18px;
+      padding: 1.1rem;
+      text-align: center;
+      cursor: pointer;
+      background: linear-gradient(0deg, #f0f8ef, #f7fcf7);
+      transition: background 160ms ease, transform 160ms ease, border-color 160ms ease;
     }
-    .drop:hover { background:#e8f5e9; }
-    .drop img { max-width:100%; max-height:280px; border-radius:16px; margin-top:1rem; }
+
+    .drop:hover {
+      background: #ebf7eb;
+      border-color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    #preview {
+      width: 100%;
+      max-height: 260px;
+      object-fit: cover;
+      border-radius: var(--radius-md);
+      margin-top: 0.8rem;
+      display: none;
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.13);
+    }
+
+    .file-meta {
+      margin-top: 0.6rem;
+      font-size: 0.84rem;
+      color: #45604e;
+      min-height: 1.25rem;
+    }
+
+    .actions {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+    }
+
     button {
-      background:linear-gradient(135deg,#E8C547,#D4A017); border:none; border-radius:40px;
-      padding:.85rem 1.75rem; font-family:Poppins,sans-serif; font-weight:600;
-      color:var(--primary); cursor:pointer; margin:.5rem .5rem 0 0; font-size:.95rem;
+      background: linear-gradient(135deg, #e8c547, var(--gold));
+      border: none;
+      border-radius: 999px;
+      padding: 0.68rem 1.1rem;
+      font-family: Poppins, sans-serif;
+      font-weight: 600;
+      color: var(--primary);
+      cursor: pointer;
+      font-size: 0.87rem;
+      box-shadow: 0 8px 15px rgba(207, 166, 42, 0.3);
+      transition: transform 120ms ease, filter 120ms ease;
     }
-    button:disabled { opacity:.5; cursor:not-allowed; }
-    .result { margin-top:1rem; padding:1rem; border-radius:16px; font-size:.95rem; line-height:1.5; }
-    .ok { background:#E8F5E9; border:1px solid var(--accent); }
-    .fail { background:#FFEBEE; border:1px solid #C62828; color:#B71C1C; }
-    pre { background:#f5f5f5; border-radius:12px; padding:1rem; font-size:.78rem; overflow:auto; max-height:220px; margin-top:.75rem; }
-    .status { display:inline-block; padding:.25rem .75rem; border-radius:20px; font-size:.85rem; font-weight:600; }
-    .online { background:#E8F5E9; color:var(--accent); }
-    .offline { background:#FFEBEE; color:#C62828; }
-    .tips { font-size:.85rem; color:#666; margin-top:.75rem; line-height:1.6; }
+
+    button:hover:not(:disabled) {
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .result {
+      margin-top: 0.95rem;
+      padding: 0.9rem;
+      border-radius: var(--radius-md);
+      font-size: 0.91rem;
+      line-height: 1.55;
+    }
+
+    .ok {
+      background: var(--accent-soft);
+      border: 1px solid #9ccc9f;
+      color: #204124;
+    }
+
+    .fail {
+      background: var(--danger-soft);
+      border: 1px solid #e9a2a2;
+      color: #6f1b1b;
+    }
+
+    .empty-result {
+      margin-top: 0.95rem;
+      padding: 0.75rem 0.9rem;
+      border-radius: var(--radius-md);
+      background: #f8faf7;
+      border: 1px dashed #d5e5d4;
+      color: #67846f;
+      font-size: 0.85rem;
+    }
+
+    .result-list {
+      margin-top: 0.45rem;
+      padding-left: 1.1rem;
+    }
+
+    .result-list li {
+      margin-bottom: 0.3rem;
+    }
+
+    pre {
+      background: #f3f5f2;
+      border-radius: 12px;
+      border: 1px solid #e2e7df;
+      padding: 0.85rem;
+      font-size: 0.78rem;
+      overflow: auto;
+      max-height: 230px;
+      margin-top: 0.75rem;
+      display: none;
+    }
+
+    .guide-grid {
+      margin-top: 0.95rem;
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .guide-item {
+      border-radius: var(--radius-md);
+      padding: 0.75rem;
+      border: 1px solid #e7efe5;
+      background: #fbfdfb;
+    }
+
+    .guide-item strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      color: var(--primary-soft);
+    }
+
+    .code {
+      display: block;
+      margin-top: 0.45rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+        "Courier New", monospace;
+      font-size: 0.78rem;
+      padding: 0.5rem 0.55rem;
+      border-radius: 8px;
+      background: #f0f4ee;
+      border: 1px solid #d9e4d4;
+      color: #2f4a39;
+      overflow-wrap: anywhere;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
+        margin-top: -1.4rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div style="font-size:2.5rem">🌾</div>
+  <header class="hero">
+    <div style="font-size:2.35rem;line-height:1">🌾</div>
     <h1>AgriSmartAI</h1>
-    <p style="opacity:.85;margin-top:.5rem">Rice Leaf Detection Test — Batinao Demo</p>
-    <p style="margin-top:.75rem"><span id="apiStatus" class="status offline">Checking API...</span></p>
+    <p>Rice Leaf Detection Demo - Batinao</p>
+    <span id="apiStatus" class="status offline">Checking API...</span>
   </header>
-  <main>
-    <div class="card">
-      <h2>📷 Upload Rice Leaf Photo</h2>
-      <p class="tips">Accepts <strong>green</strong>, <strong>yellow (Tungro)</strong>, and <strong>diseased</strong> rice leaves. Rejects faces, sky, and other objects.</p>
+
+  <main class="layout">
+    <section class="card">
+      <h2>Upload Rice Leaf Photo</h2>
+      <p class="tips">
+        Accepts <strong>green</strong>, <strong>yellow (Tungro)</strong>, and <strong>diseased</strong>
+        rice leaves. Rejects faces, sky, and unrelated objects.
+      </p>
+
       <div class="drop" id="dropZone" onclick="document.getElementById('fileInput').click()">
-        <p>Click or drag your rice leaf photo here</p>
-        <p style="font-size:.85rem;color:#666;margin-top:.5rem">JPG / PNG — frame one leaf, good lighting</p>
-        <img id="preview" style="display:none" alt="preview" />
+        <p><strong>Click or drag image here</strong></p>
+        <p class="tips" style="margin-top:0.35rem">JPG / PNG / WEBP - frame one leaf with clear lighting</p>
+        <img id="preview" alt="Selected leaf preview" />
       </div>
+      <div id="fileMeta" class="file-meta"></div>
       <input type="file" id="fileInput" accept="image/jpeg,image/png,image/webp" hidden />
-      <div style="margin-top:1rem">
-        <button id="validateBtn" disabled onclick="validateImage()">1. Check if Rice Leaf</button>
-        <button id="predictBtn" disabled onclick="predictImage()">2. Detect Disease</button>
+
+      <div class="actions">
+        <button id="validateBtn" disabled onclick="validateImage()">1) Validate Rice Leaf</button>
+        <button id="predictBtn" disabled onclick="predictImage()">2) Detect Disease</button>
       </div>
-      <div id="validationResult"></div>
-      <pre id="predictOut" style="display:none"></pre>
-    </div>
-    <div class="card">
-      <h2>✅ Accepted</h2>
-      <p class="tips">Close-up rice leaf — green, yellow (Tungro), or with disease spots. No face/hands/sky.</p>
-      <h2 style="margin-top:1rem">❌ Rejected</h2>
-      <p class="tips">Selfies, random objects, indoor scenes, blue sky, non-green photos.</p>
-    </div>
+
+      <div id="validationResult" class="empty-result">Upload a rice leaf photo to begin.</div>
+      <pre id="predictOut"></pre>
+    </section>
+
+    <aside class="card">
+      <h2>Capture Guide</h2>
+      <p class="tips">Use clear close-up photos for more stable classification.</p>
+      <div class="guide-grid">
+        <div class="guide-item">
+          <strong>Good photos</strong>
+          <p class="tips">Single rice leaf in focus, natural daylight, minimal background clutter.</p>
+        </div>
+        <div class="guide-item">
+          <strong>Avoid</strong>
+          <p class="tips">Hands/faces, sky-only shots, dark blur, or multiple mixed objects.</p>
+        </div>
+        <div class="guide-item">
+          <strong>If API is offline</strong>
+          <p class="tips">Run backend from the project root:</p>
+          <code class="code">cd backend && python3 -m uvicorn main:app --host 127.0.0.1 --port 8000</code>
+        </div>
+      </div>
+    </aside>
   </main>
+
   <script>
-    const API = 'http://127.0.0.1:8000';
+    const API = resolveApiBase();
     let selectedFile = null;
 
+    const fileInput = document.getElementById("fileInput");
+    const dropZone = document.getElementById("dropZone");
+    const preview = document.getElementById("preview");
+    const fileMeta = document.getElementById("fileMeta");
+    const validateBtn = document.getElementById("validateBtn");
+    const predictBtn = document.getElementById("predictBtn");
+    const resultBox = document.getElementById("validationResult");
+    const predictOut = document.getElementById("predictOut");
+
+    fileInput.onchange = () => setFile(fileInput.files[0]);
+    dropZone.ondragover = (event) => {
+      event.preventDefault();
+      dropZone.style.background = "#e8f5e9";
+    };
+    dropZone.ondragleave = () => {
+      dropZone.style.background = "";
+    };
+    dropZone.ondrop = (event) => {
+      event.preventDefault();
+      dropZone.style.background = "";
+      setFile(event.dataTransfer.files[0]);
+    };
+
+    function resolveApiBase() {
+      const queryApi = new URLSearchParams(window.location.search).get("api");
+      if (queryApi) return queryApi;
+      if (window.location.protocol === "file:") return "http://127.0.0.1:8000";
+      return `${window.location.protocol}//${window.location.hostname}:8000`;
+    }
+
     async function checkHealth() {
-      const el = document.getElementById('apiStatus');
+      const statusElement = document.getElementById("apiStatus");
       try {
-        await fetch(API + '/health');
-        el.textContent = 'API Online';
-        el.className = 'status online';
-      } catch {
-        el.textContent = 'API Offline — run: cd backend && python -m uvicorn main:app --port 8000';
-        el.className = 'status offline';
+        const response = await fetch(`${API}/health`, { cache: "no-store" });
+        if (!response.ok) throw new Error("Health endpoint failed");
+        statusElement.textContent = `API Online (${API})`;
+        statusElement.className = "status online";
+      } catch (_error) {
+        statusElement.textContent = "API Offline - start backend with python3 -m uvicorn";
+        statusElement.className = "status offline";
       }
     }
 
-    const fileInput = document.getElementById('fileInput');
-    const preview = document.getElementById('preview');
-    const validateBtn = document.getElementById('validateBtn');
-    const predictBtn = document.getElementById('predictBtn');
-
-    fileInput.onchange = () => setFile(fileInput.files[0]);
-    const drop = document.getElementById('dropZone');
-    drop.ondragover = e => { e.preventDefault(); drop.style.background = '#e8f5e9'; };
-    drop.ondragleave = () => drop.style.background = '#f0faf0';
-    drop.ondrop = e => { e.preventDefault(); drop.style.background = '#f0faf0'; setFile(e.dataTransfer.files[0]); };
-
     function setFile(file) {
-      if (!file || !file.type.startsWith('image/')) return;
+      if (!file || !file.type.startsWith("image/")) {
+        resultBox.className = "result fail";
+        resultBox.textContent = "Please upload a valid image file (JPG, PNG, or WEBP).";
+        return;
+      }
+
       selectedFile = file;
       preview.src = URL.createObjectURL(file);
-      preview.style.display = 'block';
+      preview.style.display = "block";
+      fileMeta.textContent = `Selected: ${file.name} (${formatBytes(file.size)})`;
+
       validateBtn.disabled = false;
       predictBtn.disabled = false;
-      document.getElementById('validationResult').innerHTML = '';
-      document.getElementById('predictOut').style.display = 'none';
+      resultBox.className = "empty-result";
+      resultBox.textContent = "Photo loaded. Validate first, then run disease detection.";
+      predictOut.style.display = "none";
+    }
+
+    function formatBytes(bytes) {
+      if (!Number.isFinite(bytes)) return "Unknown size";
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
     }
 
     async function postImage(endpoint) {
-      const fd = new FormData();
-      fd.append('file', selectedFile);
-      const r = await fetch(API + endpoint, { method: 'POST', body: fd });
-      const text = await r.text();
-      let json;
-      try { json = JSON.parse(text); } catch { json = { raw: text }; }
-      if (!r.ok) throw { status: r.status, body: json };
-      return json;
+      if (!selectedFile) throw new Error("No selected file");
+      const formData = new FormData();
+      formData.append("file", selectedFile);
+
+      const response = await fetch(`${API}${endpoint}`, {
+        method: "POST",
+        body: formData,
+      });
+      const text = await response.text();
+      let body;
+      try {
+        body = JSON.parse(text);
+      } catch (_error) {
+        body = { raw: text };
+      }
+      if (!response.ok) throw { status: response.status, body };
+      return body;
     }
 
     async function validateImage() {
-      const box = document.getElementById('validationResult');
-      box.innerHTML = '<p style="margin-top:1rem">Checking...</p>';
+      resultBox.className = "empty-result";
+      resultBox.textContent = "Checking if image is a rice leaf...";
+
       try {
-        const j = await postImage('/validate');
-        box.innerHTML = `<div class="result ok"><strong>${j.message}</strong><br>Green ratio: ${(j.green_ratio*100).toFixed(1)}%</div>`;
-      } catch (e) {
-        const msg = e.body?.detail?.message || e.body?.message || JSON.stringify(e.body) || 'Validation failed';
-        box.innerHTML = `<div class="result fail"><strong>${msg}</strong></div>`;
+        const payload = await postImage("/validate");
+        if (!payload.is_valid) {
+          resultBox.className = "result fail";
+          resultBox.innerHTML = `<strong>${payload.message || "Not a rice leaf."}</strong>`;
+          return;
+        }
+
+        resultBox.className = "result ok";
+        resultBox.innerHTML =
+          `<strong>${payload.message || "Rice leaf validated."}</strong>` +
+          `<br />Green ratio: ${((payload.green_ratio || 0) * 100).toFixed(1)}%`;
+      } catch (error) {
+        const message =
+          error?.body?.detail?.message ||
+          error?.body?.message ||
+          "Validation failed. Check API logs.";
+        resultBox.className = "result fail";
+        resultBox.innerHTML = `<strong>${message}</strong>`;
       }
     }
 
     async function predictImage() {
-      const box = document.getElementById('validationResult');
-      const out = document.getElementById('predictOut');
-      box.innerHTML = '<p style="margin-top:1rem">Analyzing disease...</p>';
+      resultBox.className = "empty-result";
+      resultBox.textContent = "Analyzing disease pattern...";
+
       try {
-        const j = await postImage('/predict');
-        box.innerHTML = `<div class="result ok"><strong>✅ ${j.display_name || j.disease}</strong><br>Confidence: ${j.confidence_percent} · ${j.severity}</div>`;
-        out.style.display = 'block';
-        out.textContent = JSON.stringify(j, null, 2);
-      } catch (e) {
-        const d = e.body?.detail;
-        const msg = (typeof d === 'object' ? d.message : d) || 'Not a rice leaf or API error';
-        box.innerHTML = `<div class="result fail"><strong>❌ ${msg}</strong></div>`;
-        out.style.display = 'none';
+        const payload = await postImage("/predict");
+        const recommendations = (payload.fertilizer_recommendations || [])
+          .map((item) => `<li>${item}</li>`)
+          .join("");
+
+        resultBox.className = "result ok";
+        resultBox.innerHTML =
+          `<strong>${payload.display_name || payload.disease || "Detection complete"}</strong>` +
+          `<br />Confidence: ${payload.confidence_percent || "N/A"} · Severity: ${payload.severity || "Unknown"}` +
+          (payload.da_message ? `<br /><br /><em>${payload.da_message}</em>` : "") +
+          (recommendations ? `<ul class="result-list">${recommendations}</ul>` : "");
+
+        predictOut.style.display = "block";
+        predictOut.textContent = JSON.stringify(payload, null, 2);
+      } catch (error) {
+        const detail = error?.body?.detail;
+        const message =
+          (typeof detail === "object" ? detail?.message : detail) ||
+          error?.body?.message ||
+          "Prediction failed. Ensure backend is running.";
+        resultBox.className = "result fail";
+        resultBox.innerHTML = `<strong>${message}</strong>`;
+        predictOut.style.display = "none";
       }
     }
 
