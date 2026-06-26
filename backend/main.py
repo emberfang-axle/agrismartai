@@ -24,6 +24,7 @@ from models import (
     FeedbackRequest,
     HealthResponse,
     ReportCreateRequest,
+    ReportStatusUpdate,
     UserResponse,
     ValidationResponse,
 )
@@ -156,6 +157,7 @@ def _report_to_scan(row: dict) -> dict:
     return {
         "id": str(row["id"]),
         "user_id": str(row["user_id"]),
+        "farmer_name": row.get("farmer_name") or "Unknown",
         "disease_code": row.get("disease_code") or "healthy",
         "disease_name": row.get("disease_label") or "Healthy",
         "disease_label": row.get("disease_label"),
@@ -163,7 +165,8 @@ def _report_to_scan(row: dict) -> dict:
         "confidence_score": float(row.get("confidence_score") or 0),
         "barangay": row.get("barangay") or "New Bataan",
         "image_url": row.get("image_url"),
-        "status": row.get("status"),
+        "status": row.get("status") or "pending",
+        "reviewer_note": row.get("reviewer_note"),
         "created_at": row["created_at"].isoformat() if row.get("created_at") else None,
     }
 
@@ -253,13 +256,36 @@ def create_report(req: ReportCreateRequest) -> dict:
 
 
 @app.patch("/api/reports/{report_id}/status")
-def update_report_status(report_id: str, status: str) -> dict:
+def update_report_status(report_id: str, body: ReportStatusUpdate) -> dict:
     if not _pg_ready():
         raise HTTPException(503, "PostgreSQL not connected.")
-    ok = pg.update_report_status(report_id, status)
+    ok = pg.update_report_status(
+        report_id, body.status, reviewer_note=body.reviewer_note
+    )
     if not ok:
         raise HTTPException(404, "Report not found.")
-    return {"id": report_id, "status": status}
+    return {"id": report_id, "status": body.status, "reviewer_note": body.reviewer_note}
+
+
+@app.get("/api/farmers")
+def list_farmers() -> list:
+    if not _pg_ready():
+        return []
+    return pg.fetch_farmers()
+
+
+@app.get("/api/feedback")
+def list_feedback() -> list:
+    if not _pg_ready():
+        return []
+    return pg.fetch_feedback()
+
+
+@app.get("/api/disease-stats")
+def disease_stats() -> list:
+    if not _pg_ready():
+        return []
+    return pg.disease_stats()
 
 
 @app.delete("/api/reports/{report_id}")

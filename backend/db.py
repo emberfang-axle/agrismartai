@@ -189,14 +189,76 @@ def fetch_reports(user_id: str | None = None) -> list[dict]:
             return [dict(row) for row in cur.fetchall()]
 
 
-def update_report_status(report_id: str, status: str) -> bool:
+def update_report_status(
+    report_id: str, status: str, reviewer_note: str | None = None
+) -> bool:
     with get_conn() as conn:
         with conn.cursor() as cur:
-            cur.execute(
-                "UPDATE reports SET status = %s WHERE id = %s",
-                (status, report_id),
-            )
+            if reviewer_note is not None:
+                cur.execute(
+                    """
+                    UPDATE reports
+                    SET status = %s, reviewer_note = %s
+                    WHERE id = %s
+                    """,
+                    (status, reviewer_note, report_id),
+                )
+            else:
+                cur.execute(
+                    "UPDATE reports SET status = %s WHERE id = %s",
+                    (status, report_id),
+                )
             return cur.rowcount > 0
+
+
+def fetch_farmers() -> list[dict]:
+    with get_conn() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT u.id, u.name, u.email, u.barangay, u.created_at,
+                       COUNT(r.id) AS total_scans,
+                       SUM(CASE WHEN r.disease_code != 'healthy' THEN 1 ELSE 0 END) AS diseased_scans
+                FROM users u
+                LEFT JOIN reports r ON r.user_id = u.id
+                WHERE u.role = 'farmer'
+                GROUP BY u.id
+                ORDER BY u.created_at DESC
+                """
+            )
+            return [dict(row) for row in cur.fetchall()]
+
+
+def fetch_feedback() -> list[dict]:
+    with get_conn() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT f.id, f.rating, f.comment, f.created_at,
+                       u.name AS farmer_name
+                FROM feedback f
+                JOIN users u ON u.id = f.user_id
+                ORDER BY f.created_at DESC
+                LIMIT 100
+                """
+            )
+            return [dict(row) for row in cur.fetchall()]
+
+
+def disease_stats() -> list[dict]:
+    with get_conn() as conn:
+        with conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor) as cur:
+            cur.execute(
+                """
+                SELECT disease_code, disease_label,
+                       COUNT(*) AS total_scans,
+                       AVG(confidence_score) AS avg_confidence
+                FROM reports
+                GROUP BY disease_code, disease_label
+                ORDER BY total_scans DESC
+                """
+            )
+            return [dict(row) for row in cur.fetchall()]
 
 
 def delete_report(report_id: str, user_id: str) -> bool:

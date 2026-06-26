@@ -105,7 +105,7 @@ foreach ($p in 8000, 8080, 8081) {
 
 $cfg = Read-DotEnv $envFile
 $dartDefines = @()
-foreach ($key in @("SUPABASE_URL", "SUPABASE_ANON_KEY", "API_BASE_URL")) {
+foreach ($key in @("API_BASE_URL")) {
     if ($cfg.ContainsKey($key) -and $cfg[$key]) {
         $dartDefines += "--dart-define=${key}=$($cfg[$key])"
     }
@@ -113,7 +113,7 @@ foreach ($key in @("SUPABASE_URL", "SUPABASE_ANON_KEY", "API_BASE_URL")) {
 $dartArg = if ($dartDefines.Count -gt 0) { $dartDefines -join " " } else { "" }
 
 $backendEnv = @{}
-foreach ($key in @("SUPABASE_URL", "SUPABASE_SERVICE_ROLE_KEY", "API_BASE_URL", "PORT")) {
+foreach ($key in @("DATABASE_URL", "API_BASE_URL", "PORT")) {
     if ($cfg.ContainsKey($key) -and $cfg[$key]) { $backendEnv[$key] = $cfg[$key] }
 }
 

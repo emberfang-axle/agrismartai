@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
-import '../services/supabase_service.dart';
 import '../utils/constants.dart';
 import 'login_screen.dart';
 import 'main_shell.dart';
@@ -26,9 +25,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
 
   Future<void> _bootstrap() async {
     try {
-      if (AppConfig.isSupabaseConfigured) {
-        await SupabaseService.init();
-      }
+      await ref.read(postgresqlServiceProvider).init();
       await ref.read(authProvider.notifier).bootstrap()
           .timeout(const Duration(seconds: 5));
     } catch (_) {}

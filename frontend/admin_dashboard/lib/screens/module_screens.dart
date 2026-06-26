@@ -305,7 +305,7 @@ class SystemMonitoringScreen extends ConsumerWidget {
                         color: AppColors.ink)),
                 SizedBox(height: 12),
                 _ServiceRow('FastAPI Backend', 'Online', AppColors.success),
-                _ServiceRow('Supabase Database', 'Connected', AppColors.success),
+                _ServiceRow('PostgreSQL Database', 'Connected', AppColors.success),
                 _ServiceRow('AI Inference', 'Simulated', AppColors.primary),
                 _ServiceRow('Storage', 'Ready', AppColors.success),
               ],
@@ -317,7 +317,7 @@ class SystemMonitoringScreen extends ConsumerWidget {
   }
 }
 
-// ── User Management: real profiles from Supabase ──────────────────────────────
+// ── User Management: farmers from PostgreSQL backend ───────────────────────────
 
 class UserManagementScreen extends ConsumerWidget {
   const UserManagementScreen({super.key});
@@ -336,7 +336,7 @@ class UserManagementScreen extends ConsumerWidget {
             subtitle: 'Registered farmers and staff accounts',
           ),
           const SizedBox(height: 24),
-          // Staff accounts (static — these are seeded in Supabase)
+          // Staff accounts (static — seeded in PostgreSQL)
           AdminUi.glassCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -354,7 +354,7 @@ class UserManagementScreen extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 20),
-          // Registered farmers from Supabase
+          // Registered farmers from backend
           farmersAsync.when(
             loading: () => const Center(child: CircularProgressIndicator()),
             error: (_, __) => AdminUi.emptyState(

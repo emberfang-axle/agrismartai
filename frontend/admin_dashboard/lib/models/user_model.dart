@@ -1,5 +1,22 @@
-/// AgriSmartAI :: Farmer/user model for the admin dashboard.
-/// OBJECTIVE 4: lists registered farmers and their scan activity.
+// AgriSmartAI :: Farmer/user models for the admin dashboard.
+// OBJECTIVE 4: lists registered farmers and their scan activity.
+
+class UserModel {
+  final String id;
+  final String fullName;
+  final String email;
+  final String role;
+  final String barangay;
+
+  const UserModel({
+    required this.id,
+    required this.fullName,
+    required this.email,
+    this.role = 'admin',
+    this.barangay = 'New Bataan',
+  });
+}
+
 class FarmerModel {
   final String id;
   final String fullName;

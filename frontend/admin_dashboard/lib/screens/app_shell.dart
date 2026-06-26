@@ -5,7 +5,7 @@ import '../providers/auth_provider.dart';
 import 'dashboard_screen.dart';
 import 'login_screen.dart';
 
-/// Routes between login and dashboard. Supabase init runs in background.
+/// Routes between login and dashboard. Backend health check runs in background.
 class AppShell extends ConsumerStatefulWidget {
   const AppShell({super.key});
 

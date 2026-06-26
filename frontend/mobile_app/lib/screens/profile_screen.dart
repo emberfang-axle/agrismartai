@@ -358,7 +358,7 @@ class _EvaluationSheetState extends ConsumerState<_EvaluationSheet> {
     setState(() => _saving = true);
     final uid = widget.userId;
     if (uid != null) {
-      await ref.read(supabaseServiceProvider).saveEvaluation(
+      await ref.read(postgresqlServiceProvider).saveEvaluation(
             userId: uid,
             rating: _rating,
             comment: _comment.text.trim().isEmpty ? null : _comment.text.trim(),
@@ -371,7 +371,7 @@ class _EvaluationSheetState extends ConsumerState<_EvaluationSheet> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(isDemo
-            ? 'Thank you! Saved when using a live Supabase account.'
+            ? 'Thank you! Your feedback will sync when the backend is online.'
             : 'Salamat! Your evaluation was submitted.'),
       ),
     );

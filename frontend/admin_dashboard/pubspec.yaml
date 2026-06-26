@@ -17,8 +17,8 @@ dependencies:
   # State management
   flutter_riverpod: 2.5.1
 
-  # Backend (Auth + PostgreSQL)
-  supabase_flutter: ^2.8.0
+  # Backend (PostgreSQL via FastAPI)
+  http: ^1.2.2
 
   # Charts
   fl_chart: ^1.2.0

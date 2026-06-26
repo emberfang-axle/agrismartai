@@ -1,23 +1,14 @@
-/// Admin dashboard compile-time configuration.
+import 'package:flutter/foundation.dart';
+
+/// Admin dashboard — talks to FastAPI backend (PostgreSQL via REST).
 class AppConfig {
   AppConfig._();
 
-  static const String supabaseUrl = String.fromEnvironment(
-    'SUPABASE_URL',
-    defaultValue: 'https://YOUR_PROJECT.supabase.co',
-  );
-  static const String supabaseAnonKey = String.fromEnvironment(
-    'SUPABASE_ANON_KEY',
-    defaultValue: 'YOUR_SUPABASE_ANON_KEY',
-  );
+  static const String _apiFromEnv = String.fromEnvironment('API_BASE_URL');
 
-  static bool get isSupabaseConfigured {
-    final urlOk = supabaseUrl.contains('.supabase.co') &&
-        !supabaseUrl.contains('YOUR_PROJECT') &&
-        !supabaseUrl.contains('supabase.com/dashboard');
-    final keyOk = supabaseAnonKey.isNotEmpty &&
-        !supabaseAnonKey.contains('YOUR_SUPABASE') &&
-        supabaseAnonKey.startsWith('eyJ');
-    return urlOk && keyOk;
+  static String get apiBaseUrl {
+    if (_apiFromEnv.isNotEmpty) return _apiFromEnv;
+    if (kIsWeb) return 'http://localhost:8000';
+    return 'http://10.0.2.2:8000';
   }
 }

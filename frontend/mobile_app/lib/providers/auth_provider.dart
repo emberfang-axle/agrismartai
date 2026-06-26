@@ -34,9 +34,6 @@ final postgresqlServiceProvider = Provider<PostgreSQLService>(
   (ref) => PostgreSQLService.instance,
 );
 
-/// Backward-compatible alias used by scan_provider.
-final supabaseServiceProvider = postgresqlServiceProvider;
-
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>(
   (ref) => AuthNotifier(ref.read(postgresqlServiceProvider)),
 );

@@ -11,7 +11,7 @@ frontend/
 
 backend/              FastAPI REST API
 ai_model/             Local AI (detection + chat — no external LLM APIs)
-supabase/             PostgreSQL schema + RLS + seed
+postgresql/           PostgreSQL schema (accessed via FastAPI backend)
 scripts/              start-dev.ps1, stop-dev.ps1
 ```
 

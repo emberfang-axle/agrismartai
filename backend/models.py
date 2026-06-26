@@ -65,7 +65,6 @@ class HealthResponse(BaseModel):
     service: str = "AgriSmartAI Backend"
     model_version: str = "mobilenetv2-sim-1.0"
     ai_chat_enabled: bool = True
-    supabase_enabled: bool = False
     postgresql_enabled: bool = False
 
 
@@ -98,7 +97,9 @@ class ReportCreateRequest(BaseModel):
     location: Optional[str] = None
 
 
-class FeedbackRequest(BaseModel):
+class ReportStatusUpdate(BaseModel):
+    status: str
+    reviewer_note: Optional[str] = None
     user_id: str
     rating: int = Field(ge=1, le=5)
     comment: Optional[str] = None

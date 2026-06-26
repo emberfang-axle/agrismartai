@@ -7,7 +7,7 @@ import '../models/report_model.dart';
 import '../providers/data_mode_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/report_provider.dart';
-import '../services/admin_supabase_service.dart';
+import '../services/admin_api_service.dart';
 import '../widgets/chart_widget.dart';
 import '../widgets/sidebar.dart';
 import '../widgets/stats_card.dart';

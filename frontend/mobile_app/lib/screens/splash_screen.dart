@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/auth_provider.dart';
-import '../services/supabase_service.dart';
+import '../services/postgresql_service.dart';
 import '../utils/constants.dart';
 import '../widgets/agri_brand_logo.dart';
 import 'login_screen.dart';
 import 'main_shell.dart';
 
-/// AgriSmartAI splash — logo animation, Supabase check, progress bar, auto-navigate.
+/// AgriSmartAI splash — logo animation, backend check, progress bar, auto-navigate.
 class SplashScreen extends ConsumerStatefulWidget {
   static const route = '/';
   const SplashScreen({super.key});
@@ -25,7 +25,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   late final AnimationController _progressCtrl;
 
   double _progress = 0;
-  bool _supabaseOk = true;
+  bool _backendOk = true;
   bool _connectionChecked = false;
   bool _navigated = false;
   String _statusText = 'Initializing...';
@@ -61,7 +61,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
   Future<void> _startSequence() async {
     final startedAt = DateTime.now();
 
-    // Staggered entrance animations
     await Future.delayed(const Duration(milliseconds: 100));
     _logoCtrl.forward();
     await Future.delayed(const Duration(milliseconds: 200));
@@ -69,7 +68,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     await Future.delayed(const Duration(milliseconds: 150));
     _taglineCtrl.forward();
 
-    // Run bootstrap + connection check in parallel with progress bar
     _progressCtrl.forward();
     final bootstrapFuture = _bootstrap();
 
@@ -78,7 +76,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
       Future.delayed(const Duration(milliseconds: _minSplashMs)),
     ]);
 
-    // Ensure minimum splash duration
     final elapsed = DateTime.now().difference(startedAt).inMilliseconds;
     if (elapsed < _minSplashMs) {
       await Future.delayed(Duration(milliseconds: _minSplashMs - elapsed));
@@ -86,9 +83,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
     if (!mounted || _navigated) return;
 
-    if (!_supabaseOk && AppConfig.isSupabaseConfigured) {
+    if (!_backendOk && !AppConfig.forceOfflineDemo) {
       setState(() {
-        _statusText = 'Connection failed — tap Retry';
+        _statusText = 'Backend offline — tap Retry or continue in demo';
         _progress = _progressCtrl.value;
       });
       return;
@@ -99,28 +96,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   Future<void> _bootstrap() async {
     try {
-      setState(() => _statusText = 'Checking Supabase connection...');
-
-      if (AppConfig.isSupabaseConfigured) {
-        _supabaseOk = await SupabaseService.checkConnection();
-        if (mounted) {
-          setState(() {
-            _connectionChecked = true;
-            _statusText = _supabaseOk
-                ? 'Connected to AgriSmartAI cloud'
-                : 'Connection failed';
-          });
-        }
-        if (_supabaseOk) {
-          await SupabaseService.init();
-        }
-      } else {
-        _supabaseOk = true;
+      if (AppConfig.forceOfflineDemo) {
+        _backendOk = true;
         if (mounted) {
           setState(() {
             _connectionChecked = true;
             _statusText = 'Offline demo mode';
           });
+        }
+      } else {
+        setState(() => _statusText = 'Checking backend connection...');
+        _backendOk = await PostgreSQLService.checkConnection();
+        if (mounted) {
+          setState(() {
+            _connectionChecked = true;
+            _statusText = _backendOk
+                ? 'Connected to AgriSmartAI API'
+                : 'Backend offline — demo mode available';
+          });
+        }
+        if (_backendOk) {
+          await PostgreSQLService.instance.init();
         }
       }
 
@@ -130,8 +126,8 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
           .bootstrap()
           .timeout(const Duration(seconds: 3));
     } catch (_) {
-      if (AppConfig.isSupabaseConfigured) {
-        _supabaseOk = false;
+      if (!AppConfig.forceOfflineDemo) {
+        _backendOk = false;
         if (mounted) setState(() => _statusText = 'Connection failed');
       }
     }
@@ -139,7 +135,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
 
   Future<void> _retry() async {
     setState(() {
-      _supabaseOk = true;
+      _backendOk = true;
       _connectionChecked = false;
       _statusText = 'Retrying connection...';
       _progress = 0;
@@ -148,7 +144,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
     _progressCtrl.forward();
     await _bootstrap();
     if (!mounted) return;
-    if (_supabaseOk) _navigate();
+    if (_backendOk || AppConfig.forceOfflineDemo) _navigate();
   }
 
   void _navigate() {
@@ -178,13 +174,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
         height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF0B3B1F),
-              Color(0xFF052A14),
-              Color(0xFF021A0C),
-            ],
+            colors: [Color(0xFF072A16), Color(0xFF0B3B1F), Color(0xFF1A6B3C)],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
         ),
         child: SafeArea(
@@ -193,60 +185,27 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
               Column(
                 children: [
                   const Spacer(flex: 2),
-                  // Logo — fade + scale (1.0 → 1.2)
+                  ScaleTransition(
+                    scale: CurvedAnimation(
+                      parent: _logoCtrl,
+                      curve: Curves.easeOutBack,
+                    ),
+                    child: const AgriBrandLogo(size: 120, showTagline: false),
+                  ),
+                  const SizedBox(height: 28),
                   FadeTransition(
-                    opacity: _logoCtrl,
-                    child: ScaleTransition(
-                      scale: Tween<double>(begin: 1.0, end: 1.2).animate(
-                        CurvedAnimation(
-                          parent: _logoCtrl,
-                          curve: Curves.easeOut,
-                        ),
-                      ),
-                      child: const AgriSmartLogo(size: 100, showGlow: true),
+                    opacity: _titleCtrl,
+                    child: Text(
+                      AppConfig.appName,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: 0.5,
+                          ),
                     ),
                   ),
-                  const SizedBox(height: 36),
-                  // App name — gold gradient, fade + slide up
-                  AnimatedBuilder(
-                    animation: _titleCtrl,
-                    builder: (_, child) => Opacity(
-                      opacity: _titleCtrl.value,
-                      child: Transform.translate(
-                        offset: Offset(0, 24 * (1 - _titleCtrl.value)),
-                        child: child,
-                      ),
-                    ),
-                    child: ShaderMask(
-                      shaderCallback: (bounds) => const LinearGradient(
-                        colors: [
-                          Color(0xFFD4A017),
-                          Color(0xFFFFD54F),
-                          Color(0xFFD4A017),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ).createShader(bounds),
-                      child: const Text(
-                        'AgriSmartAI',
-                        style: TextStyle(
-                          fontSize: 36,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: 1.5,
-                          color: Colors.white,
-                          shadows: [
-                            Shadow(
-                              color: Color(0x66000000),
-                              blurRadius: 12,
-                              offset: Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  // Tagline — fade in
+                  const SizedBox(height: 8),
                   FadeTransition(
                     opacity: _taglineCtrl,
                     child: const Text(
@@ -261,7 +220,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                     ),
                   ),
                   const Spacer(flex: 3),
-                  // Loading progress bar
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 48),
                     child: Column(
@@ -285,9 +243,9 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                             color: Colors.white.withValues(alpha: 0.6),
                           ),
                         ),
-                        if (!_supabaseOk &&
+                        if (!_backendOk &&
                             _connectionChecked &&
-                            AppConfig.isSupabaseConfigured) ...[
+                            !AppConfig.forceOfflineDemo) ...[
                           const SizedBox(height: 16),
                           OutlinedButton.icon(
                             onPressed: _retry,
@@ -301,6 +259,14 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                               ),
                             ),
                           ),
+                          const SizedBox(height: 8),
+                          TextButton(
+                            onPressed: _navigate,
+                            child: const Text(
+                              'Continue in demo mode',
+                              style: TextStyle(color: Color(0xFFD4A017)),
+                            ),
+                          ),
                         ],
                       ],
                     ),
@@ -308,7 +274,6 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   const SizedBox(height: 48),
                 ],
               ),
-              // Version bottom-right
               Positioned(
                 right: 20,
                 bottom: 16,

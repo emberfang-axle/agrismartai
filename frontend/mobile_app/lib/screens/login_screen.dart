@@ -117,7 +117,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             const Text('Access your rice disease dashboard',
                 style: TextStyle(color: AppColors.muted, fontSize: 14)),
             const SizedBox(height: 28),
-            if (!AppConfig.isSupabaseConfigured) ...[
+            if (AppConfig.forceOfflineDemo) ...[
               Container(
                 padding: const EdgeInsets.all(12),
                 margin: const EdgeInsets.only(bottom: 20),

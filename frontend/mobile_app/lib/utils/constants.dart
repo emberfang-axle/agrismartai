@@ -13,15 +13,6 @@ class AppConfig {
   static const String assistantName = 'Ka-Agro';
   static const String location = 'New Bataan, Davao de Oro';
 
-  static const String supabaseUrl = String.fromEnvironment(
-    'SUPABASE_URL',
-    defaultValue: 'https://YOUR_PROJECT.supabase.co',
-  );
-  static const String supabaseAnonKey = String.fromEnvironment(
-    'SUPABASE_ANON_KEY',
-    defaultValue: 'YOUR_SUPABASE_ANON_KEY',
-  );
-
   static const String _apiFromEnv = String.fromEnvironment('API_BASE_URL');
 
   static String get apiBaseUrl {
@@ -43,16 +34,6 @@ class AppConfig {
     // Web + default URL → no API calls (avoids ERR_CONNECTION_REFUSED).
     if (kIsWeb && _apiFromEnv.isEmpty) return true;
     return false;
-  }
-
-  static bool get isSupabaseConfigured {
-    final urlOk = supabaseUrl.contains('.supabase.co') &&
-        !supabaseUrl.contains('YOUR_PROJECT') &&
-        !supabaseUrl.contains('supabase.com/dashboard');
-    final keyOk = supabaseAnonKey.isNotEmpty &&
-        !supabaseAnonKey.contains('YOUR_SUPABASE') &&
-        supabaseAnonKey.startsWith('eyJ');
-    return urlOk && keyOk;
   }
 }
 

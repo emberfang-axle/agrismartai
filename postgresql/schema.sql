@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS reports (
     confidence_score DECIMAL(5,2),
     severity VARCHAR(20) CHECK (severity IN ('mild', 'moderate', 'severe')),
     status VARCHAR(20) DEFAULT 'pending' CHECK (status IN ('pending', 'verified', 'rejected')),
+    reviewer_note TEXT,
     location TEXT,
     barangay VARCHAR(100) DEFAULT 'New Bataan',
     created_at TIMESTAMP DEFAULT NOW()

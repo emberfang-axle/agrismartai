@@ -17,7 +17,7 @@ AgriSmartAI/
 │   ├── agrismart_chat.py       # Local conversational AI (QA knowledge engine)
 │   ├── train_model.py          # Train real MobileNetV2 when dataset is ready
 │   └── knowledge/qa_pairs.json # Chat knowledge base
-├── supabase/                # Database schema, RLS, seed data
+├── postgresql/              # PostgreSQL schema + seed (via backend)
 └── scripts/                 # start-dev.ps1, stop-dev.ps1
 ```
 
@@ -72,9 +72,14 @@ Check status anytime: `.\scripts\check-dev.ps1`
 
 **Demo login:** Admin `admin@agrismartai.ph` / `admin123` — Farmer: any email/password.
 
-### 3. Supabase (optional for production)
+### 3. PostgreSQL database
 
-Run in order: `supabase/schema.sql` → `rls_policies.sql` → `seed_data.sql` → **`patch_capstone.sql`**
+```powershell
+createdb agrismartai
+psql -d agrismartai -f postgresql/schema.sql
+```
+
+Set `DATABASE_URL` in `backend/.env` (see `backend/.env.example`), then start the API.
 
 **Defense tomorrow:** see [DEFENSE_TOMORROW.md](DEFENSE_TOMORROW.md)
 

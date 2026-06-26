@@ -1,4 +1,4 @@
-/// AgriSmartAI :: Scan + detection models (mirrors supabase `scans` table).
+/// AgriSmartAI :: Scan + detection models (mirrors PostgreSQL `reports` table).
 library;
 
 class DiseaseInfo {

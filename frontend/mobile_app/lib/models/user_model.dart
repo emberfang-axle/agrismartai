@@ -1,4 +1,4 @@
-/// AgriSmartAI :: User model (mirrors supabase `profiles` table).
+/// AgriSmartAI :: User model (mirrors PostgreSQL `users` table).
 /// OBJECTIVE 3 & 4: identifies farmers/technicians for referral + evaluation.
 class UserModel {
   final String id;

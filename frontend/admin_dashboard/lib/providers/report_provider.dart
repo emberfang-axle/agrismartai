@@ -5,11 +5,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/evaluation_model.dart';
 import '../models/report_model.dart';
 import '../models/user_model.dart';
-import '../services/admin_supabase_service.dart';
+import '../services/admin_api_service.dart';
 import 'data_mode_provider.dart';
 
-final adminSupabaseProvider =
-    Provider<AdminSupabaseService>((ref) => AdminSupabaseService.instance);
+final adminApiProvider =
+    Provider<AdminApiService>((ref) => AdminApiService.instance);
 
 final navIndexProvider = StateProvider<int>((ref) => 0);
 
@@ -24,7 +24,7 @@ final farmerProvider = FutureProvider<List<FarmerModel>>((ref) async {
   if (ref.watch(usingDemoDataProvider)) return _demoFarmers;
   try {
     return await ref
-        .read(adminSupabaseProvider)
+        .read(adminApiProvider)
         .fetchFarmers()
         .timeout(const Duration(seconds: 8));
   } catch (_) {
@@ -36,7 +36,7 @@ final activityProvider = FutureProvider<List<ActivityEntry>>((ref) async {
   if (ref.watch(usingDemoDataProvider)) return _demoActivities;
   try {
     return await ref
-        .read(adminSupabaseProvider)
+        .read(adminApiProvider)
         .fetchRecentActivities(limit: 50)
         .timeout(const Duration(seconds: 8));
   } catch (_) {
@@ -48,7 +48,7 @@ final evaluationsProvider = FutureProvider<List<EvaluationModel>>((ref) async {
   if (ref.watch(usingDemoDataProvider)) return _demoEvaluations;
   try {
     final live = await ref
-        .read(adminSupabaseProvider)
+        .read(adminApiProvider)
         .fetchEvaluations()
         .timeout(const Duration(seconds: 8));
     return live.isEmpty ? _demoEvaluations : live;
@@ -65,7 +65,7 @@ final diseaseStatsProvider = FutureProvider<List<DiseaseStat>>((ref) async {
         );
     return _statsFromReports(reports);
   }
-  final live = await ref.read(adminSupabaseProvider).fetchDiseaseStats();
+  final live = await ref.read(adminApiProvider).fetchDiseaseStats();
   if (live.isNotEmpty) return live;
   final reports = ref.watch(reportProvider).maybeWhen(
         data: (v) => v,
@@ -140,7 +140,7 @@ class ReportNotifier extends StateNotifier<AsyncValue<List<ReportModel>>> {
 
   bool get isLive =>
       _ref.read(dataModeProvider) == DataMode.live &&
-      AdminSupabaseService.instance.isReady;
+      AdminApiService.instance.isReady;
 
   Future<void> reload() async {
     if (_ref.read(usingDemoDataProvider)) {
@@ -149,13 +149,13 @@ class ReportNotifier extends StateNotifier<AsyncValue<List<ReportModel>>> {
     }
     try {
       final live = await _ref
-          .read(adminSupabaseProvider)
+          .read(adminApiProvider)
           .fetchReports()
           .timeout(const Duration(seconds: 8));
-      // Use live data (even if empty) — do NOT fall back to demo when Supabase works.
+      // Use live data (even if empty) — do NOT fall back to demo when API works.
       state = AsyncValue.data(live);
     } catch (_) {
-      // Supabase unreachable — keep current state or show demo.
+      // Backend unreachable — keep current state or show demo.
       final current = state.maybeWhen(data: (v) => v, orElse: () => null);
       if (current == null) state = AsyncValue.data(_demoReports);
     }
@@ -166,7 +166,7 @@ class ReportNotifier extends StateNotifier<AsyncValue<List<ReportModel>>> {
   Future<String?> verify(String id, {String? note}) async {
     if (isLive) {
       try {
-        await _ref.read(adminSupabaseProvider).verifyReport(id, note: note);
+        await _ref.read(adminApiProvider).verifyReport(id, note: note);
         _ref.invalidate(activityProvider);
         _ref.invalidate(farmerProvider);
         await reload();
@@ -182,7 +182,7 @@ class ReportNotifier extends StateNotifier<AsyncValue<List<ReportModel>>> {
   Future<String?> reject(String id, {String? note}) async {
     if (isLive) {
       try {
-        await _ref.read(adminSupabaseProvider).rejectReport(id, note: note);
+        await _ref.read(adminApiProvider).rejectReport(id, note: note);
         _ref.invalidate(activityProvider);
         _ref.invalidate(farmerProvider);
         await reload();

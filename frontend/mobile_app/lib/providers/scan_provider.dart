@@ -113,7 +113,7 @@ class ScanNotifier extends StateNotifier<ScanState> {
       longitude: coords?.lng,
     );
 
-    // Save to Supabase for real (non-demo) users.
+    // Save to PostgreSQL via backend for real (non-demo) users.
     if (user != null && !isDemoUser) {
       try {
         if (result.scanId != null && result.scanId!.isNotEmpty) {
