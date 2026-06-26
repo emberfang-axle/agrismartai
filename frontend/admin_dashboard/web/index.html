@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="AGRISMARTAI Admin Platform">
+  <meta name="theme-color" content="#0B3B1F">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>AgriSmartAI Admin</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root { --bg: #F8FAFC; }
+    html, body { height: 100%; margin: 0; background: var(--bg); }
+    flt-glass-pane, flutter-view { background: var(--bg) !important; }
+    #loader {
+      position: fixed; inset: 0; z-index: 999999;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      background: linear-gradient(135deg, #0B3B1F, #145A32, #1A6B3C);
+      color: white; font-family: system-ui, sans-serif;
+    }
+    #loader.hidden { opacity: 0; visibility: hidden; }
+    .spinner {
+      width: 36px; height: 36px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.85s linear infinite;
+      margin-bottom: 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div id="loader">
+    <div class="spinner"></div>
+    <div style="font-weight:700">AgriSmartAI Admin</div>
+    <div style="font-size:13px;opacity:0.75;margin-top:6px">Smart Farming, Better Harvest</div>
+  </div>
+  <script src="passkeys_bundle.js"></script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

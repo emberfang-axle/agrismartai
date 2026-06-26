@@ -1,0 +1,102 @@
+# =============================================================================
+# AgriSmartAI — keep repo languages: Dart, Python, SQL, HTML only
+# =============================================================================
+
+# Secrets
+.env
+*.env.local
+
+# -----------------------------------------------------------------------------
+# Flutter — auto-generated / build (never commit)
+# -----------------------------------------------------------------------------
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/build/
+**/.packages
+**/pubspec.lock
+
+# Platform scaffolding (recreated by `flutter create` — not your source code)
+**/ios/
+**/macos/
+**/linux/
+**/windows/
+
+# Android generated / build
+**/android/.cxx/
+**/android/.gradle/
+**/android/local.properties
+**/android/**/GeneratedPluginRegistrant.java
+**/android/captures/
+**/android/key.properties
+**/*.jks
+
+# C / C++ / CMake (Flutter desktop + native build output)
+**/*.cmake
+**/CMakeLists.txt
+**/*.cpp
+**/*.cc
+**/*.c
+**/*.h
+**/*.hpp
+**/*.rc
+**/*.manifest
+
+# Swift / Objective-C (iOS/macOS scaffolding)
+**/*.swift
+**/*.m
+**/*.mm
+**/*.plist
+**/*.pbxproj
+**/*.xcconfig
+**/*.storyboard
+**/*.xib
+**/*.entitlements
+
+# -----------------------------------------------------------------------------
+# Python
+# -----------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+ai_model/artifacts/
+ai_model/dataset/
+
+# -----------------------------------------------------------------------------
+# Node / JS (old web dashboard — not part of capstone)
+# -----------------------------------------------------------------------------
+node_modules/
+package-lock.json
+dist/
+.vite/
+
+# -----------------------------------------------------------------------------
+# ML binaries (TensorFlow Lite — inflates C++ stats on GitHub)
+# -----------------------------------------------------------------------------
+**/*.tflite
+**/*.lite
+
+# -----------------------------------------------------------------------------
+# Old / duplicate project folders (removed from repo structure)
+# -----------------------------------------------------------------------------
+standalone_app/
+/mobile_app/
+web_dashboard/
+demo/
+evaluation/
+public/
+frontend/farmer_mobile_app/
+frontend/admin_web_dashboard/
+**/tmp/
+scripts/logs/
+
+# -----------------------------------------------------------------------------
+# IDE / OS
+# -----------------------------------------------------------------------------
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+**/__pycache__/

@@ -1,0 +1,40 @@
+name: agrismartai_dashboard
+description: "AgriSmartAI Admin Dashboard - rice disease monitoring for New Bataan, Davao de Oro."
+publish_to: "none"
+version: 1.0.0+1
+
+# OBJECTIVE 4: Farmer evaluation + admin dashboard
+# Flutter Web + Riverpod + fl_chart
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # State management
+  flutter_riverpod: 2.5.1
+
+  # Backend (Auth + PostgreSQL)
+  supabase_flutter: ^2.8.0
+
+  # Charts
+  fl_chart: ^1.2.0
+
+  # UI
+  google_fonts: ^8.1.0
+  flutter_animate: ^4.5.0
+
+  # Utilities
+  intl: ^0.20.2
+  cached_network_image: ^3.4.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true

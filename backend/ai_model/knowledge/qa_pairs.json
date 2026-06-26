@@ -1,0 +1,182 @@
+[
+  {
+    "question": "what is bacterial leaf blight",
+    "keywords": ["bacterial leaf blight", "blight", "xanthomonas"],
+    "answer": "Bacterial leaf blight is a rice disease caused by Xanthomonas oryzae. Symptoms include yellowing and wilting of leaves starting from the tips and margins. Treatment: Apply copper-based bactericide. Drain flooded fields. Reduce nitrogen fertilizer and increase potassium. Use resistant varieties like NSIC Rc 222."
+  },
+  {
+    "question": "what is rice blast",
+    "keywords": ["rice blast", "blast", "pyricularia", "magnaporthe"],
+    "answer": "Rice blast is a fungal disease caused by Pyricularia oryzae. Symptoms include diamond-shaped gray-brown lesions on leaves. It can also cause neck rot. Treatment: Apply fungicides with tricyclazole or azoxystrobin. Reduce nitrogen fertilizer. Improve air circulation with proper plant spacing."
+  },
+  {
+    "question": "what is tungro",
+    "keywords": ["tungro", "leafhopper", "viral disease", "yellow orange"],
+    "answer": "Tungro is a viral disease transmitted by green leafhoppers (Nephotettix virescens). Symptoms include yellow-orange leaf discoloration and stunted growth. Treatment: Control leafhoppers with insecticide like Buprofezin. Remove and burn infected plants. There is no direct chemical cure — prevention is key."
+  },
+  {
+    "question": "what is brown spot",
+    "keywords": ["brown spot", "bipolaris", "brown"],
+    "answer": "Brown spot is a fungal disease caused by Bipolaris oryzae, common in nutrient-poor soils. Symptoms include oval brown spots on leaves with yellow halos. Treatment: Apply Mancozeb or Propiconazole fungicide. Apply potassium and zinc fertilizer. Use certified seeds and maintain balanced soil nutrition."
+  },
+  {
+    "question": "what is sheath blight",
+    "keywords": ["sheath blight", "rhizoctonia", "sheath"],
+    "answer": "Sheath blight is a fungal disease caused by Rhizoctonia solani. It affects the leaf sheath near the waterline. Symptoms include oval greenish-gray lesions on the sheath, and lodging in severe cases. Treatment: Apply Validamycin or Azoxystrobin. Reduce plant density and avoid excessive nitrogen."
+  },
+  {
+    "question": "how to prevent rice diseases",
+    "keywords": ["prevent", "avoid disease", "stop disease", "prevention"],
+    "answer": "To prevent rice diseases: (1) Use disease-resistant varieties like NSIC Rc 222. (2) Practice crop rotation — avoid continuous rice monoculture. (3) Apply balanced fertilizer; avoid excess nitrogen. (4) Monitor fields every 5-7 days. (5) Use certified disease-free seeds. (6) Maintain proper plant spacing. (7) Consult your local DA office regularly."
+  },
+  {
+    "question": "what are symptoms of rice disease",
+    "keywords": ["symptoms", "signs", "identify", "how to know"],
+    "answer": "Common rice disease symptoms: Blast — diamond-shaped gray-brown lesions. Bacterial Blight — yellowing from leaf tips, water-soaked margins. Tungro — yellow-orange leaves, stunted plants. Brown Spot — small oval brown spots with yellow halo. Sheath Blight — oval lesions on leaf sheath near waterline. Use AgriSmartAI to take a photo for instant AI diagnosis."
+  },
+  {
+    "question": "can rice disease spread",
+    "keywords": ["spread", "contagious", "infect other", "neighbor"],
+    "answer": "Yes, most rice diseases can spread. Fungal diseases (blast, brown spot) spread through wind and water splash. Bacterial blight spreads through water flow. Tungro spreads through leafhopper insects. To prevent spread: remove infected plant parts immediately, do not work in wet fields, clean tools between areas, and apply preventive treatment to nearby plants."
+  },
+  {
+    "question": "what treatment for rice disease",
+    "keywords": ["treatment", "cure", "medicine", "fungicide", "spray chemical"],
+    "answer": "General rice disease treatments: Fungal diseases (Blast, Brown Spot, Sheath Blight) — use Tricyclazole, Mancozeb, Azoxystrobin, or Propiconazole. Bacterial diseases (Bacterial Blight) — use copper-based bactericides. Viral diseases (Tungro) — control the leafhopper insect vector with insecticide. Always follow label dosage and wear protective gear."
+  },
+  {
+    "question": "how to use agrismartai",
+    "keywords": ["how to use", "agrismartai", "how to scan", "upload photo", "how does it work"],
+    "answer": "How to use AgriSmartAI: (1) Open the app and log in. (2) Tap Take Photo or Upload Image. (3) Point camera at the affected rice leaf and take a clear photo. (4) The AI analyzes the image in 2-5 seconds. (5) View the disease detection result with confidence score and fertilizer recommendations. (6) Tap Chat to ask me follow-up questions. (7) View all past results in Reports."
+  },
+  {
+    "question": "what fertilizer for rice",
+    "keywords": ["fertilizer", "nutrient", "feed", "npk", "14-14-14", "urea", "46-0-0"],
+    "answer": "Recommended fertilizer for rice per hectare: At planting (basal) — 14-14-14 complete fertilizer, 4 bags (200 kg). At tillering stage (20-25 days) — 46-0-0 Urea, 2 bags (100 kg). At panicle initiation (45-50 days) — 46-0-0 Urea, 1 bag (50 kg). Always base rates on a soil test. Avoid too much nitrogen — it increases disease risk. Contact DA New Bataan for free soil analysis: (084) 123-4567."
+  },
+  {
+    "question": "how to do soil test",
+    "keywords": ["soil test", "soil analysis", "soil health", "soil sample"],
+    "answer": "Soil testing tells you exactly how much fertilizer your field needs. Where to get soil tested: DA Regional Field Office — FREE for registered farmers. PhilRice Regional Stations. State universities with agriculture programs. What to bring: 500g soil sample mixed from 10 spots in your field at 0-15cm depth. Results show pH, nitrogen, phosphorus, potassium, and organic matter. Contact DA New Bataan: (084) 123-4567."
+  },
+  {
+    "question": "what is organic fertilizer",
+    "keywords": ["organic", "compost", "manure", "organic fertilizer", "vermicompost"],
+    "answer": "Organic fertilizers for rice: Compost — apply 2-3 tons per hectare 1-2 weeks before planting. Vermicompost — apply 1-2 tons per hectare, more nutrient-dense. Rice straw compost — return cut straw to the field after harvest. Azolla (green manure) — grow in field 2 weeks before transplanting for nitrogen. Farmyard manure — apply 5 tons per hectare basal. Organic fertilizers improve soil structure and reduce chemical fertilizer cost by 30-50%."
+  },
+  {
+    "question": "fertilizer schedule",
+    "keywords": ["fertilizer schedule", "when apply fertilizer", "fertilizer timing", "application time"],
+    "answer": "Rice fertilizer application schedule: Basal (before planting) — 14-14-14 complete, 4 bags per hectare. Early tillering at 20-25 days after transplant — Urea 46-0-0, 2 bags per hectare. Panicle initiation at 45-50 days — Urea, 1 bag per hectare. Split nitrogen application reduces disease risk and improves uptake. Never apply fertilizer on flooded field — wait for 2-3 cm water level."
+  },
+  {
+    "question": "nutrient deficiency rice",
+    "keywords": ["deficiency", "potassium", "phosphorus", "zinc", "micronutrient", "pale leaves"],
+    "answer": "Common nutrient deficiencies in rice: Nitrogen deficiency — pale green or yellow leaves from older leaves, apply Urea. Phosphorus deficiency — purplish discoloration, apply Complete fertilizer or Superphosphate. Potassium deficiency — brown leaf tips and margins similar to blight, apply Muriate of Potash (0-0-60). Zinc deficiency — brown rusty spots on young leaves (Bronzing), apply Zinc Sulfate at 1 kg per hectare foliar spray."
+  },
+  {
+    "question": "when to plant rice in new bataan",
+    "keywords": ["when to plant", "planting time", "planting season", "best time plant", "new bataan"],
+    "answer": "Best planting time for rice in New Bataan, Davao de Oro: Wet season (Unahan) — June to July. Dry season (Ulahing) — November to December. Plant synchronized with your neighbors to control pests and diseases better. Contact DA New Bataan Agricultural Center for the local planting calendar: (084) 123-4567."
+  },
+  {
+    "question": "how many seeds per hectare",
+    "keywords": ["seed rate", "seeds per hectare", "how many seeds", "seeding rate"],
+    "answer": "Seeding rates for rice: Transplanting — 40-50 kg seeds per hectare. Soak seeds 24 hours then incubate 24 hours before sowing in seedbed. Direct seeding dry — 60-80 kg per hectare. Direct seeding wet — 80-100 kg per hectare. Use 400 square meters seedbed per hectare of field. Transplant at 14-21 days old (2-3 leaf stage). Do not use seedlings older than 21 days."
+  },
+  {
+    "question": "how to transplant rice",
+    "keywords": ["transplant", "transplanting", "plant spacing", "spacing"],
+    "answer": "Rice transplanting guide: Best age to transplant — 14 to 21 days old (2-3 leaves). Plant spacing — Standard: 20 cm x 20 cm. Preferred SAI method: 25 cm x 25 cm. Transplant 2-3 seedlings per hill. Plant at 2-3 cm depth — not too deep. Transplant in straight rows using a rope guide for easy weeding. Transplant early morning or late afternoon, not during midday heat."
+  },
+  {
+    "question": "how to prepare land for rice",
+    "keywords": ["land preparation", "plow", "harrowing", "prepare field", "land prep"],
+    "answer": "Land preparation for rice: (1) First plowing — 3-4 weeks before transplanting, 20-25 cm deep. (2) Flood field 1-2 weeks after first plowing. (3) Second plowing (harrowing) — 1-2 weeks before transplanting to break clods. (4) Level the field using a leveler or drag board for uniform water depth. (5) Final harrowing — 3-5 days before transplanting. Add lime 1-2 bags per hectare if soil pH is below 5.5."
+  },
+  {
+    "question": "which rice variety",
+    "keywords": ["variety", "varieties", "nsic", "seed variety", "which variety", "inbred hybrid"],
+    "answer": "Recommended rice varieties: Inbred (for small farmers) — NSIC Rc 222 (Tubigan 18): blast resistant, 110 days, 5-6 tons per hectare. NSIC Rc 160 (Tubigan 7): blight tolerant, 112 days. NSIC Rc 9 (Apo): drought tolerant. Hybrid (commercial) — SL8 H, Mestizo, Bigante 2: 8-12 tons per hectare potential. Ask your DA office which varieties are resistant to diseases common in your area. DA New Bataan: (084) 123-4567."
+  },
+  {
+    "question": "when to harvest rice",
+    "keywords": ["when harvest", "harvest time", "ready to harvest", "maturity", "harvest"],
+    "answer": "Harvest rice when: 80-85% of grains have turned golden yellow or straw-colored. 25-30 days after 50% flowering (heading). Grain moisture content is 20-25%. Signs of over-maturity: excessive grain shattering and dull brownish appearance. Harvest early morning to reduce shattering losses. Avoid harvesting during rain to prevent post-harvest losses."
+  },
+  {
+    "question": "how to thresh rice",
+    "keywords": ["threshing", "thresh", "how to thresh", "thresher"],
+    "answer": "Threshing guide: Thresh within 24 hours of harvesting to prevent grain deterioration. Use a mechanical thresher for faster and cleaner threshing — reduces losses by 5%. For manual threshing: beat bundles against a hard surface over a tarpaulin. Winnow to remove chaff and empty grains. Target less than 2% threshing loss. DA has thresher units available for rent through the AgriMech program. Contact DA New Bataan: (084) 123-4567."
+  },
+  {
+    "question": "how to dry rice",
+    "keywords": ["dry rice", "drying", "grain moisture", "sun dry", "dry palay"],
+    "answer": "Grain drying after harvest: Target moisture content for storage is 14% or below. Sun drying: Spread 5-7 cm thick on clean tarpaulin. Turn every 2 hours. Takes 2-3 sunny days to go from 25% to 14% moisture. Do NOT dry on concrete roads. Mechanical dryer: More reliable during rainy season. Available through DA AgriMech program. Never store rice at more than 14% moisture — it will mold."
+  },
+  {
+    "question": "how to store palay",
+    "keywords": ["store", "storage", "palay storage", "silo", "bag storage"],
+    "answer": "Rice or palay storage tips: Store in clean dry sealed bags, preferably triple-bag with inner liner. Keep bags off the floor — use wooden pallets. Store in a well-ventilated room away from direct sunlight. Target moisture: 14% or below. Check regularly for weevils, rats, and mold. Use hercon strips or phosphine tablets for insect control following safety instructions. Expected shelf life at 14% moisture: 6-12 months without significant quality loss."
+  },
+  {
+    "question": "expected rice yield",
+    "keywords": ["yield", "how many bags", "production", "how much rice", "harvest yield"],
+    "answer": "Expected rice yield per hectare: Traditional old varieties — 2-3 tons or 33-50 cavans. Inbred NSIC varieties — 4-6 tons or 67-100 cavans. Hybrid varieties — 6-10 tons or 100-167 cavans. Note: 1 ton equals about 16.7 cavans at 60 kg per cavan. To maximize yield: use certified seeds, follow proper fertilizer schedule, control diseases and pests early, and harvest at the right time."
+  },
+  {
+    "question": "how to control rice pests",
+    "keywords": ["pest control", "insect", "ipm", "integrated pest management", "pests"],
+    "answer": "Integrated Pest Management (IPM) for rice: (1) Cultural control — synchronize planting, clean fields, rotate crops. (2) Biological control — conserve natural enemies like spiders, frogs, and dragonflies. (3) Mechanical control — hand-picking, light traps, rat traps. (4) Chemical control (LAST resort) — use insecticide only when pest exceeds Economic Threshold Level. Philippine law RA 10068 promotes organic farming. Minimize chemical use. Consult DA for pest scouting guidelines."
+  },
+  {
+    "question": "what is brown planthopper",
+    "keywords": ["brown planthopper", "bph", "planthopper", "hopper burn"],
+    "answer": "Brown Planthopper (BPH) or Nilaparvata lugens is the most destructive rice pest. It causes hopper burn — circular patches of dried dead rice. Economic Threshold Level is 15 hoppers per hill. Control: Drain field for 3-4 days to expose hoppers. Apply Buprofezin, Imidacloprid, or Etofenprox at base of plants. Avoid broad-spectrum insecticides — they kill natural enemies. Use BPH-resistant varieties like NSIC Rc 160 and Rc 222."
+  },
+  {
+    "question": "what is stem borer",
+    "keywords": ["stem borer", "borer", "deadheart", "whitehead"],
+    "answer": "Stem borer causes deadheart in the vegetative stage and whitehead in the reproductive stage. Species include Yellow stem borer (Scirpophaga incertulas) and Striped stem borer. Economic Threshold: 15% deadheart or 10% whitehead. Control: Apply Cartap Hydrochloride or Chlorantraniliprole granules at tillering. Remove egg masses manually from seedbed. Release Trichogramma egg parasitoids through DA program. Avoid applying insecticide during flowering — it kills bees."
+  },
+  {
+    "question": "how to control rats in rice field",
+    "keywords": ["rat", "rats", "rodent", "mice", "field rat", "daga"],
+    "answer": "Field rat control: Rats cause 5-20% yield loss. Methods: (1) Community synchronized trapping — most effective, coordinate with neighbors. (2) Rodenticide baiting — use zinc phosphide bait stations in field perimeter only, NOT inside the crop area. (3) Trap barriers — plastic sheet barriers with funnel traps. (4) Barn owls — install owl boxes, one owl eats about 1,300 rats per year. (5) Clean field edges — remove weeds and debris where rats nest."
+  },
+  {
+    "question": "what is golden apple snail",
+    "keywords": ["golden apple snail", "kuhol", "snail"],
+    "answer": "Golden Apple Snail or Kuhol (Pomacea canaliculata) is a major pest in transplanted and direct-seeded rice. It can destroy newly transplanted seedlings overnight. Control: (1) Hand collection of snails and red egg masses from above-water surfaces. (2) Transplant older seedlings (21+ days) which are more resistant. (3) Place net barriers at irrigation inlets. (4) Niclosamide molluscicide as last resort — harmful to fish, use with caution. (5) Release ducks 2 weeks after transplanting."
+  },
+  {
+    "question": "da office new bataan",
+    "keywords": ["da office", "department of agriculture", "da new bataan", "agricultural center", "da contact"],
+    "answer": "DA New Bataan Agricultural Center: Location — Poblacion, New Bataan, Davao de Oro. Contact number: (084) 123-4567. Services: Free soil and plant tissue analysis. Seed subsidy for registered farmers. Fertilizer subsidy (SURE Aid program). Farm machinery rental — tractors and threshers. Extension services and farm visits. Farmer training and seminars. Operating hours: Monday to Friday, 8:00 AM to 5:00 PM. DA Hotline: 1688. Website: www.da.gov.ph."
+  },
+  {
+    "question": "how to get free seeds from da",
+    "keywords": ["seed subsidy", "free seeds", "da seeds", "certified seeds"],
+    "answer": "DA Seed Subsidy Program: The DA provides subsidized or free certified seeds to qualified farmers. How to apply: (1) Register as farmer at your Municipal Agriculture Office (MAO). (2) Present your farmer ID from RSBSA registration. (3) Fill out the seed subsidy application form. (4) Seeds will be distributed per planting season. Requirements: RSBSA registration, valid government ID, proof of land ownership or lease agreement. Contact DA New Bataan: (084) 123-4567."
+  },
+  {
+    "question": "fertilizer subsidy sure aid",
+    "keywords": ["fertilizer subsidy", "sure aid", "free fertilizer", "da fertilizer program"],
+    "answer": "DA SURE Aid and Recovery Program provides subsidized fertilizers and farm inputs to registered farmers. Eligible farmers: RSBSA-registered farmers, small-scale farmers with 5 hectares or less, farmers affected by disasters or crop losses. How to avail: (1) Register or update your RSBSA record at your Municipal Agriculture Office. (2) Attend DA farmer briefing sessions. (3) Wait for distribution schedule. Other programs: KADIWA ni Ani at Kita price support, Farm Machinery Loan Program. DA New Bataan: (084) 123-4567."
+  },
+  {
+    "question": "how to register as farmer rsbsa",
+    "keywords": ["rsbsa", "farmer id", "farmer registration", "register farmer"],
+    "answer": "How to register as a farmer using RSBSA (Registry System for Basic Sectors in Agriculture): (1) Go to your Municipal Agriculture Office (MAO) in New Bataan. (2) Bring a valid government ID and land title or lease agreement. (3) Fill out the RSBSA registration form. (4) You will receive a Farmer ID within 2-4 weeks. Benefits: Access to seed, fertilizer, and pesticide subsidies. PhilHealth Kalusugan program. Crop insurance through PCIC. Farm machinery rental. Registration is FREE."
+  },
+  {
+    "question": "crop insurance pcic",
+    "keywords": ["crop insurance", "pcic", "palay insurance", "farm insurance"],
+    "answer": "PCIC Crop Insurance for rice farmers: The Philippine Crop Insurance Corporation (PCIC) provides insurance against crop losses due to typhoons, flooding, drought, and pests or diseases. Coverage: Up to 30,000 pesos per hectare (all-risk). Up to 12,000 pesos per hectare (basic). How to avail: Register with RSBSA first. Apply at your MAO or DA office. Pay premium — subsidized for small farmers, as low as 500 pesos per hectare. File claims within 7 days of crop loss. PCIC Hotline: (02) 8924-9026. DA New Bataan: (084) 123-4567."
+  },
+  {
+    "question": "water management rice",
+    "keywords": ["water", "irrigation", "flood", "awd", "alternate wetting", "water management"],
+    "answer": "Water management for rice using AWD (Alternate Wetting and Drying): (1) Flood field to 2-5 cm depth. (2) Let water drop naturally. (3) Re-flood when water drops to 15 cm below soil surface — use a perforated pipe to check. (4) Repeat throughout season. (5) Maintain continuous flooding from 7 days before heading to 7 days after heading. Benefits: Saves 20-30% water, reduces disease incidence, reduces brown planthopper risk, strengthens rice roots. Recommended by PhilRice and IRRI."
+  }
+]

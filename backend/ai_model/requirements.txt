@@ -1,0 +1,2 @@
+# AgriSmartAI AI model (optional training deps)
+# tensorflow==2.18.0
