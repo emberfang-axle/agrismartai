@@ -1,5 +1,5 @@
 """
-AgriSmartAI :: PostgreSQL database layer (FastAPI backend).
+AgriSmartAI :: PostgreSQL database layer (Python HTTP backend).
 Flutter connects via REST — not directly to PostgreSQL.
 """
 

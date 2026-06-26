@@ -8,7 +8,7 @@ import '../models/user_model.dart';
 import '../utils/constants.dart';
 import 'backend_availability.dart';
 
-/// PostgreSQL data access via FastAPI backend (Flutter never connects to PG directly).
+/// PostgreSQL data access via Python backend (Flutter never connects to PG directly).
 class PostgreSQLService {
   PostgreSQLService._();
   static final PostgreSQLService instance = PostgreSQLService._();

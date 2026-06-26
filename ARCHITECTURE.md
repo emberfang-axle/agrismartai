@@ -9,9 +9,9 @@ frontend/
   mobile_app/         Farmer app — scan leaves, chat, history, DA locator
   admin_dashboard/    Admin web — verify reports, analytics, farmers list
 
-backend/              FastAPI REST API
+backend/              Python HTTP REST API
 ai_model/             Local AI (detection + chat — no external LLM APIs)
-postgresql/           PostgreSQL schema (accessed via FastAPI backend)
+postgresql/           PostgreSQL schema (accessed via Python backend)
 scripts/              start-dev.ps1, stop-dev.ps1
 ```
 

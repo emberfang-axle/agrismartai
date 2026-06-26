@@ -7,7 +7,7 @@ import '../models/report_model.dart';
 import '../models/user_model.dart';
 import '../utils/app_config.dart';
 
-/// Admin REST client — PostgreSQL data via FastAPI backend only.
+/// Admin REST client — PostgreSQL data via Python backend only.
 class AdminApiService {
   AdminApiService._();
   static final AdminApiService instance = AdminApiService._();

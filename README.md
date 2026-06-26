@@ -11,7 +11,7 @@ AgriSmartAI/
 ├── frontend/
 │   ├── mobile_app/          # Farmer Flutter app (Android / iOS / Web)
 │   └── admin_dashboard/     # Admin Flutter Web dashboard
-├── backend/                 # FastAPI API (detection + local AI chat)
+├── backend/                 # Python HTTP API (detection + local AI chat)
 ├── ai_model/                # Our own AI (no ChatGPT/DeepSeek APIs)
 │   ├── simulate_detection.py   # MobileNetV2 disease detection (simulated / trainable)
 │   ├── agrismart_chat.py       # Local conversational AI (QA knowledge engine)

@@ -1,27 +1,25 @@
 """
-AgriSmartAI :: Pydantic request/response models for the FastAPI backend.
+AgriSmartAI :: Request/response models for the Python HTTP backend.
 """
 
 from __future__ import annotations
 
-from typing import Dict, List, Optional
-
-from pydantic import BaseModel, Field
-
-
-class DetectionResponse(BaseModel):
-    disease_code: str = Field(..., examples=["rice_blast"])
-    disease_name: str = Field(..., examples=["Rice Blast"])
-    confidence: float = Field(..., ge=0, le=100, examples=[91.4])
-    is_rice_leaf: bool = True
-    model_version: str = "mobilenetv2-sim-1.0"
-    probabilities: Dict[str, float] = Field(default_factory=dict)
-    message: str = ""
-    disease_info: Optional["DiseaseInfo"] = None
-    scan_id: Optional[str] = None
+from dataclasses import asdict, dataclass, field
+from typing import Any, Dict, List, Optional
 
 
-class DiseaseInfo(BaseModel):
+def to_json(obj: Any) -> Any:
+    if hasattr(obj, "__dataclass_fields__"):
+        return {k: to_json(v) for k, v in asdict(obj).items()}
+    if isinstance(obj, dict):
+        return {k: to_json(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [to_json(v) for v in obj]
+    return obj
+
+
+@dataclass
+class DiseaseInfo:
     code: str
     name: str
     scientific_name: str = ""
@@ -35,32 +33,50 @@ class DiseaseInfo(BaseModel):
     severity_label: str = "Moderate"
 
 
-class ValidationResponse(BaseModel):
+@dataclass
+class DetectionResponse:
+    disease_code: str
+    disease_name: str
+    confidence: float
+    is_rice_leaf: bool = True
+    model_version: str = "mobilenetv2-sim-1.0"
+    probabilities: Dict[str, float] = field(default_factory=dict)
+    message: str = ""
+    disease_info: Optional[DiseaseInfo] = None
+    scan_id: Optional[str] = None
+
+
+@dataclass
+class ValidationResponse:
     is_rice_leaf: bool
     reason: str = ""
     green_ratio: float = 0.0
     aspect_ratio: float = 0.0
 
 
-class ChatMessage(BaseModel):
-    role: str = Field(..., examples=["user", "assistant"])
+@dataclass
+class ChatMessage:
+    role: str
     content: str
 
 
-class ChatRequest(BaseModel):
+@dataclass
+class ChatRequest:
     message: str
-    history: List[ChatMessage] = Field(default_factory=list)
+    history: List[ChatMessage] = field(default_factory=list)
     context_disease: Optional[str] = None
     user_id: Optional[str] = None
 
 
-class ChatResponse(BaseModel):
+@dataclass
+class ChatResponse:
     reply: str
     source: str = "agrismart_ai"
     confidence: float = 0.0
 
 
-class HealthResponse(BaseModel):
+@dataclass
+class HealthResponse:
     status: str = "ok"
     service: str = "AgriSmartAI Backend"
     model_version: str = "mobilenetv2-sim-1.0"
@@ -68,19 +84,22 @@ class HealthResponse(BaseModel):
     postgresql_enabled: bool = False
 
 
-class AuthRegisterRequest(BaseModel):
+@dataclass
+class AuthRegisterRequest:
     name: str
     email: str
     password: str
     barangay: str = "New Bataan"
 
 
-class AuthLoginRequest(BaseModel):
+@dataclass
+class AuthLoginRequest:
     email: str
     password: str
 
 
-class UserResponse(BaseModel):
+@dataclass
+class UserResponse:
     id: str
     full_name: str
     email: str
@@ -88,7 +107,8 @@ class UserResponse(BaseModel):
     barangay: str = "New Bataan"
 
 
-class ReportCreateRequest(BaseModel):
+@dataclass
+class ReportCreateRequest:
     user_id: str
     disease_code: str
     disease_label: str
@@ -97,12 +117,14 @@ class ReportCreateRequest(BaseModel):
     location: Optional[str] = None
 
 
-class ReportStatusUpdate(BaseModel):
+@dataclass
+class ReportStatusUpdate:
     status: str
     reviewer_note: Optional[str] = None
+
+
+@dataclass
+class FeedbackRequest:
     user_id: str
-    rating: int = Field(ge=1, le=5)
+    rating: int
     comment: Optional[str] = None
-
-
-DetectionResponse.model_rebuild()

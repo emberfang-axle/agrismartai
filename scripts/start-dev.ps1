@@ -137,7 +137,7 @@ $backendCmd = "Set-Location '$root\backend'"
 foreach ($k in $backendEnv.Keys) {
     $backendCmd += "; `$env:$k='$($backendEnv[$k])'"
 }
-$backendCmd += "; python -m uvicorn main:app --host 127.0.0.1 --port 8000 2>&1 | Tee-Object -FilePath '$backendLog'"
+$backendCmd += "; python main.py 2>&1 | Tee-Object -FilePath '$backendLog'"
 Start-Process powershell -WindowStyle Minimized -ArgumentList @("-NoExit", "-Command", $backendCmd)
 if (-not (Wait-ForHttp "http://127.0.0.1:8000/api/health" 30)) {
     Write-Host "Backend failed. Check: $backendLog" -ForegroundColor Red

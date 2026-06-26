@@ -9,7 +9,7 @@ import '../utils/constants.dart';
 import 'backend_availability.dart';
 import 'local_detection_service.dart';
 
-/// FastAPI client for disease detection and chat.
+/// Python backend client for disease detection and chat.
 class ApiService {
   final String baseUrl;
   ApiService({String? baseUrl}) : baseUrl = baseUrl ?? AppConfig.apiBaseUrl;

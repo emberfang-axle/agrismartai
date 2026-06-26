@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 
 import '../utils/constants.dart';
 
-/// Tracks whether the FastAPI backend is reachable (cached to avoid spam).
+/// Tracks whether the Python backend is reachable (cached to avoid spam).
 class BackendAvailability {
   BackendAvailability._();
 

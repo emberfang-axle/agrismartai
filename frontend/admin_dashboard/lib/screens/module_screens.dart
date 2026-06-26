@@ -304,7 +304,7 @@ class SystemMonitoringScreen extends ConsumerWidget {
                         fontSize: 16,
                         color: AppColors.ink)),
                 SizedBox(height: 12),
-                _ServiceRow('FastAPI Backend', 'Online', AppColors.success),
+                _ServiceRow('Python Backend', 'Online', AppColors.success),
                 _ServiceRow('PostgreSQL Database', 'Connected', AppColors.success),
                 _ServiceRow('AI Inference', 'Simulated', AppColors.primary),
                 _ServiceRow('Storage', 'Ready', AppColors.success),

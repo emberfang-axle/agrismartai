@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-/// Admin dashboard — talks to FastAPI backend (PostgreSQL via REST).
+/// Admin dashboard — talks to Python backend (PostgreSQL via REST).
 class AppConfig {
   AppConfig._();
 

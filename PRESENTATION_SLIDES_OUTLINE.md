@@ -41,7 +41,7 @@
 ## Slide 4: Scope & Limitations
 - **Scope:** 4 disease classes (BLB, Blast, Tungro, Healthy)
 - **Platform:** Flutter mobile + Flutter Web admin dashboard
-- **Backend:** FastAPI + PostgreSQL
+- **Backend:** Python HTTP server + PostgreSQL
 - **Limitation:** AI uses simulated MobileNetV2 for capstone defense (training pipeline ready)
 
 **Speaker notes:** Be honest about simulation — real training planned with collected dataset.
@@ -53,7 +53,7 @@
 |-------|------------|
 | Mobile App | Flutter + Riverpod + image_picker |
 | Web Dashboard | Flutter Web + fl_chart |
-| Backend API | Python FastAPI |
+| Backend API | Python (stdlib HTTP server) |
 | Database | PostgreSQL |
 | AI | MobileNetV2 (simulated inference) |
 | Chatbot | Ka-Agro — local keyword QA engine |
@@ -66,7 +66,7 @@
 ```
 Farmer App (Flutter)
     ↓ REST API
-FastAPI Backend
+Python Backend
     ↓ SQL
 PostgreSQL (users, reports, diseases, feedback, chatbot_qa)
     ↓
@@ -178,7 +178,7 @@ Admin Dashboard (Flutter Web)
 
 ## Demo Checklist (Before Defense)
 - [ ] PostgreSQL running with `postgresql/schema.sql` applied
-- [ ] Backend: `cd backend && uvicorn main:app --port 8000`
+- [ ] Backend: `cd backend && python main.py`
 - [ ] Farmer app: http://localhost:8081
 - [ ] Admin: http://localhost:8080 — login `admin@agrismartai.ph` / `admin123`
 - [ ] Sample rice leaf images ready in gallery folder
